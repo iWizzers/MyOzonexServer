@@ -14,6 +14,7 @@ if (isset($_GET['id_systeme'])) {
 	if ($id != null) {
 		// Système
 		$data_systeme = array(
+			'alive' => (string)$donnees['alive'],
 			'blocage' => (int)$donnees['block'],
 			'background' => (int)$donnees['background']
 		);

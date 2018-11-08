@@ -1,7 +1,7 @@
 <?php
 include("bdd_connect.php");
 
-if (isset($_GET['id_systeme']) AND isset($_GET['password'])) {
+if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['alive'])) {
 	// Vérifie si la base de données de l'utilisateur existe
 	$req = $bdd->prepare('SELECT EXISTS (SELECT * FROM login WHERE id_systeme = :id_systeme) AS login_exists');
 	$req->execute(array(
@@ -13,10 +13,11 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password'])) {
 		$pass_hache = password_hash($_GET['password'], PASSWORD_DEFAULT);
 
 		// Création du nouvel utilisateur
-		$req = $bdd->prepare('INSERT INTO login(id_systeme, password) VALUES(:id_systeme, :password)');
+		$req = $bdd->prepare('INSERT INTO login(id_systeme, password, alive) VALUES(:id_systeme, :password, :alive)');
 		$req->execute(array(
 			'id_systeme' => (string)$_GET['id_systeme'],
-			'password' => $pass_hache
+			'password' => $pass_hache,
+			'alive' => (string)$_GET['alive']
 		));
 
 		// Récupération de l'ID du nouvel utilisateur
