@@ -33,6 +33,24 @@ if (isset($_GET['id_systeme'])) {
 			'volume_restant' => (float)$_GET['volume_restant'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['consommation_jour'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph_moins SET consommation_jour = :consommation_jour WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'consommation_jour' => (float)$_GET['consommation_jour'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['consommation_semaine'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph_moins SET consommation_semaine = :consommation_semaine WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'consommation_semaine' => (float)$_GET['consommation_semaine'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['consommation_mois'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph_moins SET consommation_mois = :consommation_mois WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'consommation_mois' => (float)$_GET['consommation_mois'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['injection'])) {
 		$req = $bdd->prepare('UPDATE regulateur_ph_moins SET injection = :injection WHERE id_systeme = :id_systeme');
 		$req->execute(array(

@@ -68,6 +68,12 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 			'id_systeme' => (int)$result['id']
 		));
 
+		// Création du régulateur de pH
+		$req = $bdd->prepare('INSERT INTO regulateur_ph(id_systeme) VALUES(:id_systeme)');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+		));
+
 		// Création du régulateur de pH+
 		$req = $bdd->prepare('INSERT INTO regulateur_ph_plus(id_systeme) VALUES(:id_systeme)');
 		$req->execute(array(

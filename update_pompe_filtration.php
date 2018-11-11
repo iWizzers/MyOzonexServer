@@ -13,6 +13,12 @@ if (isset($_GET['id_systeme'])) {
 			'etat' => (int)$_GET['etat'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['lecture_capteurs'])) {
+		$req = $bdd->prepare('UPDATE pompe_filtration SET lecture_capteurs = :lecture_capteurs WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'lecture_capteurs' => (int)$_GET['lecture_capteurs'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['date_consommation'])) {
 		$req = $bdd->prepare('UPDATE pompe_filtration SET date_consommation = :date_consommation, consommation_hp = :consommation_hp, consommation_hc = :consommation_hc WHERE id_systeme = :id_systeme');
 		$req->execute(array(

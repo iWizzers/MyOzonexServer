@@ -13,6 +13,36 @@ if (isset($_GET['id_systeme'])) {
 			'installe' => (int)$_GET['installe'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['point_consigne_orp'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET point_consigne_orp = :point_consigne_orp WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'point_consigne_orp' => (int)$_GET['point_consigne_orp'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['hysteresis_orp'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET hysteresis_orp = :hysteresis_orp WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'hysteresis_orp' => (int)$_GET['hysteresis_orp'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['point_consigne_ampero'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET point_consigne_ampero = :point_consigne_ampero WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'point_consigne_ampero' => (float)$_GET['point_consigne_ampero'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['hysteresis_ampero'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET hysteresis_ampero = :hysteresis_ampero WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'hysteresis_ampero' => (float)$_GET['hysteresis_ampero'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['chlore_libre_actif'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET chlore_libre_actif = :chlore_libre_actif WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'chlore_libre_actif' => (float)$_GET['chlore_libre_actif'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['etat'])) {
 		$req = $bdd->prepare('UPDATE regulateur_orp SET etat = :etat WHERE id_systeme = :id_systeme');
 		$req->execute(array(
@@ -31,6 +61,24 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('UPDATE regulateur_orp SET volume_restant = :volume_restant WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'volume_restant' => (float)$_GET['volume_restant'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['consommation_jour'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET consommation_jour = :consommation_jour WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'consommation_jour' => (float)$_GET['consommation_jour'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['consommation_semaine'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET consommation_semaine = :consommation_semaine WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'consommation_semaine' => (float)$_GET['consommation_semaine'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['consommation_mois'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET consommation_mois = :consommation_mois WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'consommation_mois' => (float)$_GET['consommation_mois'],
 			'id_systeme' => (int)$result['id']
 			));
 	} elseif (isset($_GET['injection'])) {

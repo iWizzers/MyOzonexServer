@@ -69,6 +69,7 @@ if (isset($_GET['id_systeme'])) {
 		$data_pompe_filtration = array(
 			'installe' => (int)$donnees['installe'],
 			'etat' => (int)$donnees['etat'],
+			'lecture_capteurs' => (int)$donnees['lecture_capteurs'],
 			'date_consommation' => (string)$donnees['date_consommation'],
 			'consommation_hp' => (float)$donnees['consommation_hp'],
 			'consommation_hc' => (float)$donnees['consommation_hc'],
@@ -209,6 +210,23 @@ if (isset($_GET['id_systeme'])) {
 		$req->closeCursor();
 
 
+		// Régulateur pH
+		$req = $bdd->prepare('SELECT * FROM regulateur_ph WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => $id,
+			));
+
+		$donnees = $req->fetch();
+
+		$data_reg_ph = array(
+			'point_consigne' => (float)$donnees['point_consigne'],
+			'hysteresis_plus' => (float)$donnees['hysteresis_plus'],
+			'hysteresis_moins' => (float)$donnees['hysteresis_moins']
+		);
+
+		$req->closeCursor();
+
+
 		// Régulateur pH-
 		$req = $bdd->prepare('SELECT * FROM regulateur_ph_moins WHERE id_systeme = :id_systeme');
 		$req->execute(array(
@@ -223,6 +241,9 @@ if (isset($_GET['id_systeme'])) {
 			'date_consommation' => (string)$donnees['date_consommation'],
 			'volume' => (float)$donnees['volume'],
 			'volume_restant' => (float)$donnees['volume_restant'],
+			'consommation_jour' => (float)$donnees['consommation_jour'],
+			'consommation_semaine' => (float)$donnees['consommation_semaine'],
+			'consommation_mois' => (float)$donnees['consommation_mois'],
 			'injection' => (int)$donnees['injection'],
 			'duree_cycle' => (int)$donnees['duree_cycle'],
 			'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
@@ -249,6 +270,9 @@ if (isset($_GET['id_systeme'])) {
 			'date_consommation' => (string)$donnees['date_consommation'],
 			'volume' => (float)$donnees['volume'],
 			'volume_restant' => (float)$donnees['volume_restant'],
+			'consommation_jour' => (float)$donnees['consommation_jour'],
+			'consommation_semaine' => (float)$donnees['consommation_semaine'],
+			'consommation_mois' => (float)$donnees['consommation_mois'],
 			'injection' => (int)$donnees['injection'],
 			'duree_cycle' => (int)$donnees['duree_cycle'],
 			'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
@@ -271,10 +295,18 @@ if (isset($_GET['id_systeme'])) {
 
 		$data_regulateur_orp = array(
 			'installe' => (int)$donnees['installe'],
+			'point_consigne_orp' => (int)$donnees['point_consigne_orp'],
+			'hysteresis_orp' => (int)$donnees['hysteresis_orp'],
+			'point_consigne_ampero' => (float)$donnees['point_consigne_ampero'],
+			'hysteresis_ampero' => (float)$donnees['hysteresis_ampero'],
+			'chlore_libre_actif' => (float)$donnees['chlore_libre_actif'],
 			'etat' => (int)$donnees['etat'],
 			'date_consommation' => (string)$donnees['date_consommation'],
 			'volume' => (float)$donnees['volume'],
 			'volume_restant' => (float)$donnees['volume_restant'],
+			'consommation_jour' => (float)$donnees['consommation_jour'],
+			'consommation_semaine' => (float)$donnees['consommation_semaine'],
+			'consommation_mois' => (float)$donnees['consommation_mois'],
 			'injection' => (int)$donnees['injection'],
 			'duree_cycle' => (int)$donnees['duree_cycle'],
 			'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
@@ -416,6 +448,7 @@ if (isset($_GET['id_systeme'])) {
 			'Lampes UV' => $data_lampes_uv,
 			'Ozonateur' => $data_ozonateur,
 			'Electrolyseur' => $data_electrolyseur,
+			'Régulateur pH' => $data_reg_ph,
 			'Régulateur pH-' => $data_ph_moins,
 			'Régulateur pH+' => $data_ph_plus,
 			'Régulateur ORP' => $data_regulateur_orp,
