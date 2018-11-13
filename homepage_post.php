@@ -4,10 +4,10 @@ session_start();
 include("bdd_connect.php");
 
 if (isset($_POST['change_equipment_state'])) {
-	$req = $bdd->prepare('UPDATE ' . $_POST['table'] . ' SET state = :state WHERE id_system = :id_system');
+	$req = $bdd->prepare('UPDATE ' . $_POST['table'] . ' SET state = :state WHERE id_systeme = :id_systeme');
 	$req->execute(array(
 		'state' => (int)$_POST['state'],
-		'id_system' => (int)$_SESSION['id']
+		'id_systeme' => (int)$_SESSION['id']
 		));
 }
 

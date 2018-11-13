@@ -3,11 +3,11 @@ include("bdd_connect.php");
 
 $pass = false;
 
-if (isset($_POST['login']) AND !empty($_POST['id_system'])) {
+if (isset($_POST['login']) AND !empty($_POST['id_systeme']) AND !empty($_POST['password'])) {
 	//  Récupération du mot de passe hashé
-	$req = $bdd->prepare('SELECT id, password FROM login WHERE id_system = :id_system');
+	$req = $bdd->prepare('SELECT id, password FROM login WHERE id_systeme = :id_systeme');
 	$req->execute(array(
-		'id_system' => (string)$_POST['id_system']));
+		'id_systeme' => (string)$_POST['id_systeme']));
 	$result = $req->fetch();
 
 	// Comparaison de l'utilisateur envoyé via le formulaire avec la base
@@ -18,7 +18,7 @@ if (isset($_POST['login']) AND !empty($_POST['id_system'])) {
 		$pass = true;
 		session_start();
 		$_SESSION['id'] = $result['id'];
-		$_SESSION['id_system'] = $_POST['id_system'];
+		$_SESSION['id_systeme'] = $_POST['id_systeme'];
 
 		if ($result['id'] == 1)
 		{

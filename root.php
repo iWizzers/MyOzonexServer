@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-setcookie('id_system', htmlspecialchars($_SESSION['id_system']), time() + 1*60, null, null, false, true);
+setcookie('id_systeme', htmlspecialchars($_SESSION['id_systeme']), time() + 1*60, null, null, false, true);
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +27,7 @@ setcookie('id_system', htmlspecialchars($_SESSION['id_system']), time() + 1*60, 
 				</tr>
 
 				<?php
-				$req = $bdd->query('SELECT id, id_system, block FROM login');
+				$req = $bdd->query('SELECT id, id_systeme, block FROM login');
 
 				while ($donnees = $req->fetch())
 				{
@@ -39,7 +39,7 @@ setcookie('id_system', htmlspecialchars($_SESSION['id_system']), time() + 1*60, 
 						?>
 
 						<tr>
-							<td><?php echo $donnees['id_system']; ?></td>
+							<td><?php echo $donnees['id_systeme']; ?></td>
 							<td><?php echo $block_state; ?></td>
 							<td>
 								<form action="root_post.php" method="post">

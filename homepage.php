@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-setcookie('id_system', htmlspecialchars($_SESSION['id_system']), time() + 1*60, null, null, false, true);
+setcookie('id_systeme', htmlspecialchars($_SESSION['id_systeme']), time() + 1*60, null, null, false, true);
 ?>
 
 <!DOCTYPE html>
@@ -22,9 +22,9 @@ setcookie('id_system', htmlspecialchars($_SESSION['id_system']), time() + 1*60, 
 			<h1>Pompe filtration</h1>
 
 			<?php
-			$req = $bdd->prepare('SELECT state, date_consumption, peak_consumption, off_peak_consumption FROM filtration_pump f INNER JOIN login l ON l.id = f.id_system WHERE f.id_system = :id_system');
+			$req = $bdd->prepare('SELECT state, date_consumption, peak_consumption, off_peak_consumption FROM filtration_pump f INNER JOIN login l ON l.id = f.id_systeme WHERE f.id_systeme = :id_systeme');
 			$req->execute(array(
-				'id_system' => $_SESSION['id']));
+				'id_systeme' => $_SESSION['id']));
 
 			$donnees = $req->fetch();
 
@@ -66,9 +66,9 @@ setcookie('id_system', htmlspecialchars($_SESSION['id_system']), time() + 1*60, 
 				</tr>
 
 				<?php
-				$req = $bdd->prepare('SELECT * FROM sensors s INNER JOIN login l ON l.id = s.id_system WHERE s.id_system = :id_system');
+				$req = $bdd->prepare('SELECT * FROM sensors s INNER JOIN login l ON l.id = s.id_systeme WHERE s.id_systeme = :id_systeme');
 				$req->execute(array(
-					'id_system' => $_SESSION['id']));
+					'id_systeme' => $_SESSION['id']));
 
 				while ($donnees = $req->fetch())
 				{
