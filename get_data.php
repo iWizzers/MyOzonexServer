@@ -6,7 +6,8 @@ header('Content-Type: application/json');
 if (isset($_GET['id_systeme'])) {
 	$req = $bdd->prepare('SELECT * FROM login WHERE id_systeme = :id_systeme');
 	$req->execute(array(
-		'id_systeme' => (string)$_GET['id_systeme']));
+		'id_systeme' => (string)$_GET['id_systeme']
+	));
 	$donnees = $req->fetch();
 
 	$id = (int)$donnees['id'];
@@ -21,10 +22,26 @@ if (isset($_GET['id_systeme'])) {
 
 		$req->closeCursor();
 
+		// Events
+		$req = $bdd->prepare('SELECT * FROM events WHERE id_systeme = :id_systeme ORDER BY id DESC');
+		$req->execute(array(
+			'id_systeme' => $id
+			));
+
+		$data_events = array();
+		$i = 0;
+		while ($donnees = $req->fetch())
+		{
+			$data = [ "texte" => (string)$donnees['texte'], "couleur" => (int)$donnees['couleur'], "dateheure" => (string)$donnees['dateheure'], "lu" => (int)$donnees['lu'] ];
+			$data_events += [ "event" . strval(++$i) => $data ];
+		}
+
+		$req->closeCursor();
+
 		// Horlogerie
 		$req = $bdd->prepare('SELECT * FROM horlogerie WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -40,7 +57,7 @@ if (isset($_GET['id_systeme'])) {
 		// Bassin
 		$req = $bdd->prepare('SELECT * FROM bassin WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -61,7 +78,7 @@ if (isset($_GET['id_systeme'])) {
 		// Pompe filtration
 		$req = $bdd->prepare('SELECT * FROM pompe_filtration WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -85,7 +102,7 @@ if (isset($_GET['id_systeme'])) {
 		// Filtre
 		$req = $bdd->prepare('SELECT * FROM filtre WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -106,7 +123,7 @@ if (isset($_GET['id_systeme'])) {
 		// Surpresseur
 		$req = $bdd->prepare('SELECT * FROM surpresseur WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -129,7 +146,7 @@ if (isset($_GET['id_systeme'])) {
 		// Chauffage
 		$req = $bdd->prepare('SELECT * FROM chauffage WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -156,7 +173,7 @@ if (isset($_GET['id_systeme'])) {
 		// Lampes UV
 		$req = $bdd->prepare('SELECT * FROM lampes_uv WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -175,7 +192,7 @@ if (isset($_GET['id_systeme'])) {
 		// Ozonateur
 		$req = $bdd->prepare('SELECT * FROM ozonateur WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -194,7 +211,7 @@ if (isset($_GET['id_systeme'])) {
 		// Electrolyseur
 		$req = $bdd->prepare('SELECT * FROM electrolyseur WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -213,7 +230,7 @@ if (isset($_GET['id_systeme'])) {
 		// Régulateur pH
 		$req = $bdd->prepare('SELECT * FROM regulateur_ph WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -230,7 +247,7 @@ if (isset($_GET['id_systeme'])) {
 		// Régulateur pH-
 		$req = $bdd->prepare('SELECT * FROM regulateur_ph_moins WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -259,7 +276,7 @@ if (isset($_GET['id_systeme'])) {
 		// Régulateur pH+
 		$req = $bdd->prepare('SELECT * FROM regulateur_ph_plus WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -288,7 +305,7 @@ if (isset($_GET['id_systeme'])) {
 		// Régulateur ORP
 		$req = $bdd->prepare('SELECT * FROM regulateur_orp WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -326,7 +343,7 @@ if (isset($_GET['id_systeme'])) {
 		// Algicide
 		$req = $bdd->prepare('SELECT * FROM algicide WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$donnees = $req->fetch();
@@ -351,7 +368,7 @@ if (isset($_GET['id_systeme'])) {
 		// Capteurs
 		$req = $bdd->prepare('SELECT * FROM capteurs WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'id_systeme' => $id,
+			'id_systeme' => $id
 			));
 
 		$data_temp_bassin = array();
@@ -439,6 +456,7 @@ if (isset($_GET['id_systeme'])) {
 		// Format d'envoi
 		$output = array(
 			'Système' => $data_systeme,
+			'Events' => $data_events,
 			'Horlogerie' => $data_horlogerie,
 			'Bassin' => $data_bassin,
 			'Pompe filtration' => $data_pompe_filtration,
