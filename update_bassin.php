@@ -49,6 +49,12 @@ if (isset($_GET['id_systeme'])) {
 			'hyst_injection_ampero' => (float)$_GET['hyst_injection_ampero'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['etat_regulations'])) {
+		$req = $bdd->prepare('UPDATE bassin SET etat_regulations = :etat_regulations WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'etat_regulations' => (float)$_GET['etat_regulations'],
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>
