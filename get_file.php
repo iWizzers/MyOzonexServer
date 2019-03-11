@@ -1,7 +1,7 @@
 <?php
 include("bdd_connect.php");
 
-$file = 'MyOzonex.exe';
+$file = 'Piscine';
 
 if (file_exists($file) AND isset($_GET['filesize'])) {
 	if (filesize($file) != (int)$_GET['filesize']) {

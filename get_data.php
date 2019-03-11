@@ -69,7 +69,8 @@ if (isset($_GET['id_systeme'])) {
 			'temps_securite_injection' => (int)$donnees['temps_securite_injection'],
 			'hyst_injection_ph' => (float)$donnees['hyst_injection_ph'],
 			'hyst_injection_orp' => (int)$donnees['hyst_injection_orp'],
-			'hyst_injection_ampero' => (float)$donnees['hyst_injection_ampero']
+			'hyst_injection_ampero' => (float)$donnees['hyst_injection_ampero'],
+			'etat_regulations' => (int)$donnees['etat_regulations']
 		);
 
 		$req->closeCursor();
@@ -356,7 +357,7 @@ if (isset($_GET['id_systeme'])) {
 			'volume_restant' => (float)$donnees['volume_restant'],
 			'injection' => (int)$donnees['injection'],
 			'active' => (int)$donnees['active'],
-			'frequence' => (int)$donnees['frequence'],
+			'frequence' => (string)$donnees['frequence'],
 			'pendant' => (int)$donnees['pendant'],
 			'prochain' => (int)$donnees['prochain'],
 			'temps_restant' => (int)$donnees['temps_restant']

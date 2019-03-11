@@ -3,7 +3,7 @@ include("bdd_connect.php");
 
 header('Content-Type: application/json');
 
-$req = $bdd->prepare('SELECT id_systeme, proprietaire, alive FROM login ORDER BY id ASC');
+$req = $bdd->prepare('SELECT id_systeme, proprietaire, alive, version, block FROM login ORDER BY id ASC');
 $req->execute();
 $donnees = $req->fetch();
 
@@ -11,7 +11,7 @@ $data_users = array();
 $i = 0;
 while ($donnees = $req->fetch())
 {
-	$data = [ "id_systeme" => (string)$donnees['id_systeme'], "proprietaire" => (string)$donnees['proprietaire'], "alive" => (string)$donnees['alive'] ];
+	$data = [ "id_systeme" => (string)$donnees['id_systeme'], "proprietaire" => (string)$donnees['proprietaire'], "alive" => (string)$donnees['alive'], "version" => (string)$donnees['version'], "blocage" => (int)$donnees['block'] ];
 	$data_users += [ "user" . strval(++$i) => $data ];
 }
 

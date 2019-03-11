@@ -26,6 +26,12 @@ if (isset($_GET['id_systeme'])) {
 			'proprietaire' => (string)$_GET['proprietaire'],
 			'id_systeme' => $_GET['id_systeme']
 			));
+	} elseif (isset($_GET['version'])) {
+		$req = $bdd->prepare('UPDATE login SET version = :version WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'version' => (string)$_GET['version'],
+			'id_systeme' => $_GET['id_systeme']
+			));
 	}
 }
 ?>
