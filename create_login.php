@@ -27,6 +27,12 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 		$result = $req->fetch();
 
 		// Création de la pompe de filtration
+		$req = $bdd->prepare('INSERT INTO automatisation(id_systeme) VALUES(:id_systeme)');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+		));
+
+		// Création de la pompe de filtration
 		$req = $bdd->prepare('INSERT INTO pompe_filtration(id_systeme) VALUES(:id_systeme)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id']
