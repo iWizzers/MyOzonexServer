@@ -87,6 +87,12 @@ if (isset($_GET['id_systeme'])) {
 			'plage_4' => (string)$_GET['plage_4'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['type_chauffage'])) {
+		$req = $bdd->prepare('UPDATE chauffage SET type_chauffage = :type_chauffage WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'type_chauffage' => (int)$_GET['type_chauffage'],
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>
