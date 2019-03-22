@@ -124,80 +124,91 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 
 		// Création des capteurs
 		//		Température du bassin
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Température bassin"
+			'type' => "Température bassin",
+			'installe' => 1
 		));
 
 		//		Température interne
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Température interne"
+			'type' => "Température interne",
+			'installe' => 0
 		));
 
 		//		Humidité interne
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Humidité interne"
+			'type' => "Humidité interne",
+			'installe' => 0
 		));
 
 		//		Pression atmosphérique interne
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Pression atmosphérique interne"
+			'type' => "Pression atmosphérique interne",
+			'installe' => 0
 		));
 
 		//		Température externe
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Température externe"
+			'type' => "Température externe",
+			'installe' => 0
 		));
 
 		//		Humidité externe
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Humidité externe"
+			'type' => "Humidité externe",
+			'installe' => 0
 		));
 
 		//		Pression atmosphérique externe
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Pression atmosphérique externe"
+			'type' => "Pression atmosphérique externe",
+			'installe' => 0
 		));
 
 		//		pH
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "pH"
+			'type' => "pH",
+			'installe' => 1
 		));
 
 		//		ORP
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "ORP"
+			'type' => "ORP",
+			'installe' => 1
 		));
 
 		//		Pression
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Pression"
+			'type' => "Pression",
+			'installe' => 0
 		));
 
 		//		Ampéro
-		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type) VALUES(:id_systeme, :type)');
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
-			'type' => "Ampéro"
+			'type' => "Ampéro",
+			'installe' => 0
 		));
 	}
 }
