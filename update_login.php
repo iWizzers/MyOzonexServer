@@ -98,7 +98,7 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => (int)$result['id']
 				));
 
-			$req = $bdd->prepare('UPDATE bassin SET type_refoulement = DEFAULT, temps_securite_injection = DEFAULT, hyst_injection_ph = DEFAULT, hyst_injection_orp = DEFAULT, hyst_injection_ampero = DEFAULT, etat_regulations = DEFAULT WHERE id_systeme = :id_systeme');
+			$req = $bdd->prepare('UPDATE bassin SET type_refoulement = DEFAULT, type_regulation = DEFAULT, temps_securite_injection = DEFAULT, hyst_injection_ph = DEFAULT, hyst_injection_orp = DEFAULT, hyst_injection_ampero = DEFAULT, etat_regulations = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id']
 				));
