@@ -108,11 +108,11 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => (int)$result['id']
 				));
 
-			$req = $bdd->prepare('UPDATE capteurs SET installe = 1, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
+			/*$req = $bdd->prepare('UPDATE capteurs SET installe = 1, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id'],
 				'type' => "Température bassin"
-				));
+				));*/
 
 			$req = $bdd->prepare('UPDATE capteurs SET installe = 0, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
 			$req->execute(array(
@@ -150,17 +150,17 @@ if (isset($_GET['id_systeme'])) {
 				'type' => "Pression atmosphérique externe"
 				));
 
-			$req = $bdd->prepare('UPDATE capteurs SET installe = 1, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
+			/*$req = $bdd->prepare('UPDATE capteurs SET installe = 1, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id'],
 				'type' => "pH"
-				));
+				));*/
 
-			$req = $bdd->prepare('UPDATE capteurs SET installe = 1, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
+			/*$req = $bdd->prepare('UPDATE capteurs SET installe = 1, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id'],
 				'type' => "ORP"
-				));
+				));*/
 
 			$req = $bdd->prepare('UPDATE capteurs SET installe = 0, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
 			$req->execute(array(
