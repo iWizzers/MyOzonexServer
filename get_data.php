@@ -38,6 +38,28 @@ if (isset($_GET['id_systeme'])) {
 
 		$req->closeCursor();
 
+		// Automatisation
+		$req = $bdd->prepare('SELECT * FROM automatisation WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => $id
+			));
+
+		$donnees = $req->fetch();
+
+		$data_automatisation = array(
+			'heures_creuses' => (int)$donnees['heures_creuses'],
+			'donnees_equipement' => (int)$donnees['donnees_equipement'],
+			'modif_plage_auto' => (int)$donnees['modif_plage_auto'],
+			'plages_auto' => (int)$donnees['plages_auto'],
+			'debut_plage_auto' => (string)$donnees['debut_plage_auto'],
+			'temps_filtration_jour' => (string)$donnees['temps_filtration_jour'],
+			'plage_auto' => (string)$donnees['plage_auto'],
+			'asservissement_ph_plus' => (int)$donnees['asservissement_ph_plus'],
+			'asservissement_ph_moins' => (int)$donnees['asservissement_ph_moins'],
+			'asservissement_orp' => (int)$donnees['asservissement_orp'],
+			'consigne_orp_auto' => (int)$donnees['consigne_orp_auto']
+		);
+
 		// Horlogerie
 		$req = $bdd->prepare('SELECT * FROM horlogerie WHERE id_systeme = :id_systeme');
 		$req->execute(array(
@@ -71,6 +93,26 @@ if (isset($_GET['id_systeme'])) {
 			'hyst_injection_orp' => (int)$donnees['hyst_injection_orp'],
 			'hyst_injection_ampero' => (float)$donnees['hyst_injection_ampero'],
 			'etat_regulations' => (int)$donnees['etat_regulations']
+		);
+
+		$req->closeCursor();
+
+
+		// Eclairage
+		$req = $bdd->prepare('SELECT * FROM eclairage WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => $id
+			));
+
+		$donnees = $req->fetch();
+
+		$data_eclairage = array(
+			'installe' => (int)$donnees['installe'],
+			'etat' => (int)$donnees['etat'],
+			'plage_1' => (string)$donnees['plage_1'],
+			'plage_2' => (string)$donnees['plage_2'],
+			'plage_3' => (string)$donnees['plage_3'],
+			'plage_4' => (string)$donnees['plage_4']
 		);
 
 		$req->closeCursor();
@@ -165,7 +207,8 @@ if (isset($_GET['id_systeme'])) {
 			'plage_1' => (string)$donnees['plage_1'],
 			'plage_2' => (string)$donnees['plage_2'],
 			'plage_3' => (string)$donnees['plage_3'],
-			'plage_4' => (string)$donnees['plage_4']
+			'plage_4' => (string)$donnees['plage_4'],
+			'type_chauffage' => (int)$donnees['type_chauffage']
 		);
 
 		$req->closeCursor();
@@ -458,8 +501,10 @@ if (isset($_GET['id_systeme'])) {
 		$output = array(
 			'Système' => $data_systeme,
 			'Events' => $data_events,
+			'Automatisation' => $data_automatisation,
 			'Horlogerie' => $data_horlogerie,
 			'Bassin' => $data_bassin,
+			'Eclairage' => $data_eclairage,
 			'Pompe filtration' => $data_pompe_filtration,
 			'Filtre' => $data_filtre,
 			'Surpresseur' => $data_surpresseur,

@@ -17,7 +17,7 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => $_GET['id_systeme']
 				));
 
-			$req = $bdd->prepare('UPDATE automatisation SET heures_creuses = DEFAULT, donnees_equipement = DEFAULT, plages_auto = DEFAULT, donnees_asservissements = DEFAULT, consigne_orp_auto = DEFAULT WHERE id_systeme = :id_systeme');
+			$req = $bdd->prepare('UPDATE automatisation SET heures_creuses = DEFAULT, donnees_equipement = DEFAULT, modif_plage_auto = DEFAULT, plages_auto = DEFAULT, debut_plage_auto = DEFAULT,  temps_filtration_jour = DEFAULT, plage_auto = DEFAULT, asservissement_ph_plus = DEFAULT, asservissement_ph_moins = DEFAULT, asservissement_orp = DEFAULT, consigne_orp_auto = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id']
 				));
