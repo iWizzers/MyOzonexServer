@@ -69,6 +69,7 @@ if (isset($_GET['id_systeme'])) {
 		$donnees = $req->fetch();
 
 		$data_horlogerie = array(
+			'index_gmt' => (string)$donnees['index_gmt'],
 			'plage_1' => (string)$donnees['plage_1'],
 			'plage_2' => (string)$donnees['plage_2'],
 			'plage_3' => (string)$donnees['plage_3']

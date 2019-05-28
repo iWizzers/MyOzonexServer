@@ -3,6 +3,12 @@ include("bdd_connect.php");
 
 if (isset($_GET['id_systeme'])) {
 	if (isset($_GET['alive'])) {
+		$req = $bdd->prepare('UPDATE login SET alive = :alive WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alive' => (string)$_GET['alive'],
+			'id_systeme' => $_GET['id_systeme']
+			));
+		
 		if (isset($_GET['raz'])) {
 			$date_heure = explode("-", (string)$_GET['alive']);
 			$date = date_format(date_create_from_format('d/m/Y', $date_heure[0]), 'd/m/Y');
@@ -173,13 +179,7 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => (int)$result['id'],
 				'type' => "Ampéro"
 				));
-		} else {
-			$req = $bdd->prepare('UPDATE login SET alive = :alive WHERE id_systeme = :id_systeme');
-		$req->execute(array(
-			'alive' => (string)$_GET['alive'],
-			'id_systeme' => $_GET['id_systeme']
-			));
-	}
+		}
 	} elseif (isset($_GET['block'])) {
 		$req = $bdd->prepare('UPDATE login SET block = :block WHERE id_systeme = :id_systeme');
 		$req->execute(array(
