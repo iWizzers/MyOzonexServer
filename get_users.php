@@ -3,19 +3,50 @@ include("bdd_connect.php");
 
 header('Content-Type: application/json');
 
+$i = 0;
+$data_users = array();
+
 $req = $bdd->prepare('SELECT id_systeme, proprietaire, alive, version, block FROM login ORDER BY id ASC');
 $req->execute();
-$donnees = $req->fetch();
+$donnees = $req->fetch(); // Saute utilisateur "admin"
 
-$data_users = array();
-$i = 0;
+$login_count = count($donnees);
+
 while ($donnees = $req->fetch())
 {
-	$data = [ "id_systeme" => (string)$donnees['id_systeme'], "proprietaire" => (string)$donnees['proprietaire'], "alive" => (string)$donnees['alive'], "version" => (string)$donnees['version'], "blocage" => (int)$donnees['block'] ];
+	$data = [ 'id_systeme' => (string)$donnees['id_systeme'], 'proprietaire' => (string)$donnees['proprietaire'], 'alive' => (string)$donnees['alive'], 'version' => (string)$donnees['version'], 'blocage' => (int)$donnees['block'] ];
 	$data_users += [ "user" . strval(++$i) => $data ];
 }
 
 $req->closeCursor();
+
+for ($i = 0; $i < $login_count; $i++) {
+	$req = $bdd->prepare('SELECT * FROM login WHERE id_systeme = :id_systeme');
+	$req->execute(array(
+		'id_systeme' => $data_users['user' . strval($i + 1)]['id_systeme']
+		));
+	$donnees = $req->fetch();
+	$id = (int)$donnees['id'];
+	$req->closeCursor();
+
+	$req = $bdd->prepare('SELECT index_gmt FROM horlogerie WHERE id_systeme = :id_systeme');
+	$req->execute(array(
+		'id_systeme' => $id
+		));
+	$donnees = $req->fetch();
+	$data_users['user' . strval($i + 1)]['index_gmt'] = (string)$donnees['index_gmt'];
+	$req->closeCursor();
+
+	$req = $bdd->prepare('SELECT couleur FROM messages WHERE id_systeme = :id_systeme');
+	$req->execute(array(
+		'id_systeme' => $id
+		));
+	while ($donnees = $req->fetch())
+	{
+		$data_users['user' . strval($i + 1)][(string)$donnees['couleur']] = $data_users['user' . strval($i + 1)][(string)$donnees['couleur']] + 1;
+	}
+	$req->closeCursor();
+}
 
 // Format d'envoi
 $output = array(

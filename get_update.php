@@ -1,7 +1,7 @@
 <?php
 $dir_name = 'update';
 $version = file_get_contents($dir_name . '/version');
-$zip_name = 'app.rar';
+$zip_name = 'app.tar';
 $zip = $dir_name . '/' . $zip_name;
 
 if (file_exists($zip) AND isset($_GET['version'])) {
