@@ -25,6 +25,18 @@ if (isset($_GET['id_systeme'])) {
 			'hysteresis_moins' => (float)$_GET['hysteresis_moins'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['alarme_seuil_bas'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph SET alarme_seuil_bas = :alarme_seuil_bas WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alarme_seuil_bas' => (float)$_GET['alarme_seuil_bas'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['alarme_seuil_haut'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph SET alarme_seuil_haut = :alarme_seuil_haut WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alarme_seuil_haut' => (float)$_GET['alarme_seuil_haut'],
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>

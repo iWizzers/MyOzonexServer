@@ -3,19 +3,17 @@ include("bdd_connect.php");
 
 header('Content-Type: application/json');
 
-$i = 0;
+$login_count = 0;
 $data_users = array();
 
-$req = $bdd->prepare('SELECT id_systeme, proprietaire, alive, version, block FROM login ORDER BY id ASC');
+$req = $bdd->prepare('SELECT id_systeme, proprietaire, coordonnees, ville, type_connexion, alive, version_qseven, version, block FROM login ORDER BY proprietaire ASC');
 $req->execute();
 $donnees = $req->fetch(); // Saute utilisateur "admin"
 
-$login_count = count($donnees);
-
 while ($donnees = $req->fetch())
 {
-	$data = [ 'id_systeme' => (string)$donnees['id_systeme'], 'proprietaire' => (string)$donnees['proprietaire'], 'alive' => (string)$donnees['alive'], 'version' => (string)$donnees['version'], 'blocage' => (int)$donnees['block'] ];
-	$data_users += [ "user" . strval(++$i) => $data ];
+	$data = [ 'id_systeme' => (string)$donnees['id_systeme'], 'proprietaire' => (string)$donnees['proprietaire'], 'coordonnees' => (string)$donnees['coordonnees'], 'ville' => (string)$donnees['ville'], 'type_connexion' => (int)$donnees['type_connexion'], 'alive' => (string)$donnees['alive'], 'version_qseven' => (int)$donnees['version_qseven'], 'version' => (string)$donnees['version'], 'blocage' => (int)$donnees['block'] ];
+	$data_users += [ "user" . strval(++$login_count) => $data ];
 }
 
 $req->closeCursor();

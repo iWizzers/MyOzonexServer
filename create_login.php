@@ -1,6 +1,8 @@
 <?php
 include("bdd_connect.php");
 
+$pass = false;
+
 if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['alive'])) {
 	// Vérifie si la base de données de l'utilisateur existe
 	$req = $bdd->prepare('SELECT EXISTS (SELECT * FROM login WHERE id_systeme = :id_systeme) AS login_exists');
@@ -11,6 +13,10 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 	if (!$result['login_exists']) {
 		// Hachage du mot de passe
 		$pass_hache = password_hash($_GET['password'], PASSWORD_DEFAULT);
+
+		$date_heure = explode("-", (string)$_GET['alive']);
+		$date = date_format(date_create_from_format('d/m/Y', $date_heure[0]), 'd/m/Y');
+		$heure = date_format(date_create_from_format('H:i', $date_heure[1]), 'H:i');
 
 		// Création du nouvel utilisateur
 		$req = $bdd->prepare('INSERT INTO login(id_systeme, password, alive) VALUES(:id_systeme, :password, :alive)');
@@ -25,6 +31,15 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 		$req->execute(array(
 			'id_systeme' => (string)$_GET['id_systeme']));
 		$result = $req->fetch();
+
+		// Création premier evenement
+		$req = $bdd->prepare('INSERT INTO events (id_systeme, texte, couleur, dateheure) VALUES(:id_systeme, :texte, :couleur, :dateheure)');
+		$req->execute(array(
+			'texte' => "Démarrage du système",
+			'couleur' => 0,
+			'dateheure' => $date . '-' . $heure,
+			'id_systeme' => (int)$result['id']
+			));
 
 		// Création de la pompe de filtration
 		$req = $bdd->prepare('INSERT INTO automatisation(id_systeme) VALUES(:id_systeme)');
@@ -210,6 +225,14 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 			'type' => "Ampéro",
 			'installe' => 0
 		));
+
+		$pass = "LOG OK";
+	} else {
+		$pass = "LOG EXISTS";
 	}
+} else {
+	$pass = "LOG ERROR";
 }
+
+echo $pass;
 ?>

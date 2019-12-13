@@ -1,6 +1,54 @@
 <?php
 include("bdd_connect.php");
 
+
+function get_coordinates($address) {
+	$prepAddr = str_replace(' ','+',$address);
+	$geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false&key=AIzaSyCxVtrpaAk7ZQljPxI_tGHuSeOPcQNlzb8');
+	$output= json_decode($geocode);
+	$latitude = $output->results[0]->geometry->location->lat;
+	$longitude = $output->results[0]->geometry->location->lng;
+	return array($latitude, $longitude);
+}
+
+
+function get_datetime_from_nearest_timezone($coordinates) {
+    $timezone_ids = DateTimeZone::listIdentifiers();
+    $time_zone = '';
+
+    if($timezone_ids && is_array($timezone_ids) && isset($timezone_ids[0])) {
+        $tz_distance = 0;
+
+        //only one identifier?
+        if (count($timezone_ids) == 1) {
+            $time_zone = $timezone_ids[0];
+        } else {
+            foreach($timezone_ids as $timezone_id) {
+                $timezone = new DateTimeZone($timezone_id);
+                $location = $timezone->getLocation();
+                $tz_lat   = $location['latitude'];
+                $tz_long  = $location['longitude'];
+
+                $theta    = $coordinates[1] - $tz_long;
+                $distance = (sin(deg2rad($coordinates[0])) * sin(deg2rad($tz_lat))) 
+                + (cos(deg2rad($coordinates[0])) * cos(deg2rad($tz_lat)) * cos(deg2rad($theta)));
+                $distance = acos($distance);
+                $distance = abs(rad2deg($distance));
+                // echo '<br />'.$timezone_id.' '.$distance; 
+
+                if (!$time_zone || $tz_distance > $distance) {
+                    $time_zone   = $timezone_id;
+                    $tz_distance = $distance;
+                } 
+            }
+        }
+    }
+
+    $date = new DateTime("now", new DateTimeZone($time_zone));
+    return  'GMT' . $date->format('P');
+}
+
+
 if (isset($_GET['id_systeme'])) {
 	if (isset($_GET['alive'])) {
 		$req = $bdd->prepare('UPDATE login SET alive = :alive WHERE id_systeme = :id_systeme');
@@ -196,6 +244,41 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('UPDATE login SET proprietaire = :proprietaire WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'proprietaire' => (string)$_GET['proprietaire'],
+			'id_systeme' => $_GET['id_systeme']
+			));
+	} elseif (isset($_GET['coordonnees'])) {
+		$req = $bdd->prepare('UPDATE login SET coordonnees = :coordonnees WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'coordonnees' => (string)$_GET['coordonnees'],
+			'id_systeme' => $_GET['id_systeme']
+			));
+	} elseif (isset($_GET['ville'])) {
+		$req = $bdd->prepare('UPDATE login SET ville = :ville WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'ville' => (string)$_GET['ville'],
+			'id_systeme' => $_GET['id_systeme']
+			));
+
+		$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (string)$_GET['id_systeme']));
+		$result = $req->fetch();
+
+		$req = $bdd->prepare('UPDATE horlogerie SET index_gmt = :index_gmt WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'index_gmt' => (string)get_datetime_from_nearest_timezone(get_coordinates((string)$_GET['ville'])),
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['type_connexion'])) {
+		$req = $bdd->prepare('UPDATE login SET type_connexion = :type_connexion WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'type_connexion' => (int)$_GET['type_connexion'],
+			'id_systeme' => $_GET['id_systeme']
+			));
+	} elseif (isset($_GET['version_qseven'])) {
+		$req = $bdd->prepare('UPDATE login SET version_qseven = :version_qseven WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'version_qseven' => (int)$_GET['version_qseven'],
 			'id_systeme' => $_GET['id_systeme']
 			));
 	} elseif (isset($_GET['version'])) {

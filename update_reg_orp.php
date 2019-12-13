@@ -147,6 +147,30 @@ if (isset($_GET['id_systeme'])) {
 			'prochaine_surchloration' => (int)$_GET['prochaine_surchloration'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['alarme_seuil_bas_ampero'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET alarme_seuil_bas_ampero = :alarme_seuil_bas_ampero WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alarme_seuil_bas_ampero' => (float)$_GET['alarme_seuil_bas_ampero'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['alarme_seuil_haut_ampero'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET alarme_seuil_haut_ampero = :alarme_seuil_haut_ampero WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alarme_seuil_haut_ampero' => (float)$_GET['alarme_seuil_haut_ampero'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['alarme_seuil_bas_orp'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET alarme_seuil_bas_orp = :alarme_seuil_bas_orp WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alarme_seuil_bas_orp' => (int)$_GET['alarme_seuil_bas_orp'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['alarme_seuil_haut_orp'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET alarme_seuil_haut_orp = :alarme_seuil_haut_orp WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alarme_seuil_haut_orp' => (int)$_GET['alarme_seuil_haut_orp'],
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>

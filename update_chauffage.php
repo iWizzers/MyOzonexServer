@@ -93,6 +93,18 @@ if (isset($_GET['id_systeme'])) {
 			'type_chauffage' => (int)$_GET['type_chauffage'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['alarme_seuil_bas'])) {
+		$req = $bdd->prepare('UPDATE chauffage SET alarme_seuil_bas = :alarme_seuil_bas WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alarme_seuil_bas' => (int)$_GET['alarme_seuil_bas'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['alarme_seuil_haut'])) {
+		$req = $bdd->prepare('UPDATE chauffage SET alarme_seuil_haut = :alarme_seuil_haut WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'alarme_seuil_haut' => (int)$_GET['alarme_seuil_haut'],
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>
