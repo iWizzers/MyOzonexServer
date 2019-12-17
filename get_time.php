@@ -4,9 +4,13 @@ include("bdd_connect.php");
 header('Content-Type: application/json');
 
 
+$API_KEY='AIzaSyCxVtrpaAk7ZQljPxI_tGHuSeOPcQNlzb8';
+
+
 function get_coordinates($address) {
-	$prepAddr = str_replace(' ','+',$address);
-	$geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false&key=AIzaSyCxVtrpaAk7ZQljPxI_tGHuSeOPcQNlzb8');
+    global $API_KEY;
+    $prepAddr = str_replace(' ','+',$address);
+	$geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false&key='.$API_KEY);
 	$output= json_decode($geocode);
 	$latitude = $output->results[0]->geometry->location->lat;
 	$longitude = $output->results[0]->geometry->location->lng;
@@ -15,8 +19,9 @@ function get_coordinates($address) {
 
 
 function get_datetime_from_google_api($coordinates) {
+    global $API_KEY;
 	$time = time();
-	$url = 'https://maps.googleapis.com/maps/api/timezone/json?location='.$coordinates[0].','.$coordinates[1].'&timestamp='.$time.'&key=AIzaSyCxVtrpaAk7ZQljPxI_tGHuSeOPcQNlzb8';
+    $url = 'https://maps.googleapis.com/maps/api/timezone/json?location='.$coordinates[0].','.$coordinates[1].'&timestamp='.$time.'&key='.$API_KEY;
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);

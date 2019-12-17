@@ -54,7 +54,7 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('UPDATE login SET alive = :alive WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'alive' => (string)$_GET['alive'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 		
 		if (isset($_GET['raz'])) {
@@ -68,7 +68,7 @@ if (isset($_GET['id_systeme'])) {
 
 			$req = $bdd->prepare('UPDATE login SET background = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
-				'id_systeme' => $_GET['id_systeme']
+				'id_systeme' => (string)$_GET['id_systeme']
 				));
 
 			$req = $bdd->prepare('UPDATE automatisation SET heures_creuses = DEFAULT, donnees_equipement = DEFAULT, modif_plage_auto = DEFAULT, plages_auto = DEFAULT, debut_plage_auto = DEFAULT,  temps_filtration_jour = DEFAULT, plage_auto = DEFAULT, asservissement_ph_plus = DEFAULT, asservissement_ph_moins = DEFAULT, asservissement_orp = DEFAULT, consigne_orp_auto = DEFAULT WHERE id_systeme = :id_systeme');
@@ -232,31 +232,31 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('UPDATE login SET block = :block WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'block' => (int)$_GET['block'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['background'])) {
 		$req = $bdd->prepare('UPDATE login SET background = :background WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'background' => (int)$_GET['background'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['proprietaire'])) {
 		$req = $bdd->prepare('UPDATE login SET proprietaire = :proprietaire WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'proprietaire' => (string)$_GET['proprietaire'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['coordonnees'])) {
 		$req = $bdd->prepare('UPDATE login SET coordonnees = :coordonnees WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'coordonnees' => (string)$_GET['coordonnees'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['ville'])) {
 		$req = $bdd->prepare('UPDATE login SET ville = :ville WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'ville' => (string)$_GET['ville'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 
 		$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
@@ -273,19 +273,19 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('UPDATE login SET type_connexion = :type_connexion WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'type_connexion' => (int)$_GET['type_connexion'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['version_qseven'])) {
 		$req = $bdd->prepare('UPDATE login SET version_qseven = :version_qseven WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'version_qseven' => (int)$_GET['version_qseven'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['version'])) {
 		$req = $bdd->prepare('UPDATE login SET version = :version WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'version' => (string)$_GET['version'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	}
 }
