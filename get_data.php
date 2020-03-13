@@ -209,7 +209,9 @@ if (isset($_GET['id_systeme'])) {
 			'plage_2' => (string)$donnees['plage_2'],
 			'plage_3' => (string)$donnees['plage_3'],
 			'plage_4' => (string)$donnees['plage_4'],
-			'type_chauffage' => (int)$donnees['type_chauffage']
+			'type_chauffage' => (int)$donnees['type_chauffage'],
+			'alarme_seuil_bas' => (int)$donnees['alarme_seuil_bas'],
+			'alarme_seuil_haut' => (int)$donnees['alarme_seuil_haut']
 		);
 
 		$req->closeCursor();
@@ -283,7 +285,9 @@ if (isset($_GET['id_systeme'])) {
 		$data_reg_ph = array(
 			'point_consigne' => (float)$donnees['point_consigne'],
 			'hysteresis_plus' => (float)$donnees['hysteresis_plus'],
-			'hysteresis_moins' => (float)$donnees['hysteresis_moins']
+			'hysteresis_moins' => (float)$donnees['hysteresis_moins'],
+			'alarme_seuil_bas' => (float)$donnees['alarme_seuil_bas'],
+			'alarme_seuil_haut' => (float)$donnees['alarme_seuil_haut']
 		);
 
 		$req->closeCursor();
@@ -379,7 +383,11 @@ if (isset($_GET['id_systeme'])) {
 			'surchloration' => (int)$donnees['surchloration'],
 			'frequence' => (string)$donnees['frequence'],
 			'mv_ajoute' => (int)$donnees['mv_ajoute'],
-			'prochaine_surchloration' => (int)$donnees['prochaine_surchloration']
+			'prochaine_surchloration' => (int)$donnees['prochaine_surchloration'],
+			'alarme_seuil_bas_ampero' => (float)$donnees['alarme_seuil_bas_ampero'],
+			'alarme_seuil_haut_ampero' => (float)$donnees['alarme_seuil_haut_ampero'],
+			'alarme_seuil_bas_orp' => (int)$donnees['alarme_seuil_bas_orp'],
+			'alarme_seuil_haut_orp' => (int)$donnees['alarme_seuil_haut_orp']
 		);
 
 		$req->closeCursor();

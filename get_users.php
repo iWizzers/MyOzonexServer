@@ -35,13 +35,13 @@ for ($i = 0; $i < $login_count; $i++) {
 	$data_users['user' . strval($i + 1)]['index_gmt'] = (string)$donnees['index_gmt'];
 	$req->closeCursor();
 
-	$req = $bdd->prepare('SELECT couleur FROM messages WHERE id_systeme = :id_systeme');
+	$req = $bdd->prepare('SELECT couleur, COUNT(*) AS num FROM messages WHERE id_systeme = :id_systeme GROUP BY couleur');
 	$req->execute(array(
 		'id_systeme' => $id
 		));
 	while ($donnees = $req->fetch())
 	{
-		$data_users['user' . strval($i + 1)][(string)$donnees['couleur']] = $data_users['user' . strval($i + 1)][(string)$donnees['couleur']] + 1;
+		$data_users['user' . strval($i + 1)][(string)$donnees['couleur']] = (int)$donnees['num'];
 	}
 	$req->closeCursor();
 }
