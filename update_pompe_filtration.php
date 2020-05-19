@@ -63,6 +63,30 @@ if (isset($_GET['id_systeme'])) {
 			'plage_4' => (string)$_GET['plage_4'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['etat_hors_gel'])) {
+		$req = $bdd->prepare('UPDATE pompe_filtration SET etat_hors_gel = :etat_hors_gel WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'etat_hors_gel' => (int)$_GET['etat_hors_gel'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['enclenchement_hors_gel'])) {
+		$req = $bdd->prepare('UPDATE pompe_filtration SET enclenchement_hors_gel = :enclenchement_hors_gel WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'enclenchement_hors_gel' => (int)$_GET['enclenchement_hors_gel'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['arret_hors_gel'])) {
+		$req = $bdd->prepare('UPDATE pompe_filtration SET arret_hors_gel = :arret_hors_gel WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'arret_hors_gel' => (int)$_GET['arret_hors_gel'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['frequence_hors_gel'])) {
+		$req = $bdd->prepare('UPDATE pompe_filtration SET frequence_hors_gel = :frequence_hors_gel WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'frequence_hors_gel' => (int)$_GET['frequence_hors_gel'],
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>

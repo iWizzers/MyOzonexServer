@@ -1,6 +1,6 @@
 <?php
 $date = new DateTime("now");
-$dirName = '/saves';
+$dirName = '../saves';
 $nbMaxSaves = 30;
 $files = glob("$dirName/*"); //Get a list of file paths using the glob function
 

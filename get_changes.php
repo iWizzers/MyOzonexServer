@@ -9,11 +9,14 @@ if (isset($_GET['id_systeme'])) {
 	$donnees = $req->fetch();
 
 	$id = (int)$donnees['id'];
+	$version = (string)$donnees['version'];
 
 	if ($id != null) {
-		$change = (int)$donnees['changes_from_app'];
-
-		echo $change;
+		if (explode(".", $version)[0] == '1') {
+			echo (int)$donnees['changes_from_app'];
+		} else {
+			echo '<' . (int)$donnees['changes_from_app'] . '>';
+		}
 	}
 
 	$req->closeCursor();

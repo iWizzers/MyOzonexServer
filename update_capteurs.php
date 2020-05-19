@@ -22,6 +22,21 @@ if (isset($_GET['id_systeme']) AND isset($_GET['type'])) {
 			'id_systeme' => (int)$result['id'],
 			'type' => (string)$_GET['type']
 			));
+	} elseif (isset($_GET['autre'])) {
+		$req = $bdd->prepare('UPDATE capteurs SET autre = :autre WHERE id_systeme = :id_systeme AND type = :type');
+		$req->execute(array(
+			'autre' => (string)$_GET['autre'],
+			'id_systeme' => (int)$result['id'],
+			'type' => (string)$_GET['type']
+			));
+	} elseif (isset($_GET['etalonnage']) AND isset($_GET['valeur_etalonnage'])) {
+		$req = $bdd->prepare('UPDATE capteurs SET etalonnage = :etalonnage, valeur_etalonnage = :valeur_etalonnage WHERE id_systeme = :id_systeme AND type = :type');
+		$req->execute(array(
+			'etalonnage' => (int)$_GET['etalonnage'],
+			'valeur_etalonnage' => (float)$_GET['valeur_etalonnage'],
+			'id_systeme' => (int)$result['id'],
+			'type' => (string)$_GET['type']
+			));
 	}
 }
 ?>

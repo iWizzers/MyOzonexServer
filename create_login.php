@@ -18,12 +18,23 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 		$date = date_format(date_create_from_format('d/m/Y', $date_heure[0]), 'd/m/Y');
 		$heure = date_format(date_create_from_format('H:i', $date_heure[1]), 'H:i');
 
+		// Sélection du piscinier
+		if (isset($_GET['piscinier'])) {
+			$piscinier = (string)$_GET['piscinier'];
+		} else {
+			$req = $bdd->prepare('SELECT nom FROM pisciniers ORDER BY id LIMIT 1');
+			$req->execute();
+			$result = $req->fetch();
+			$piscinier = (string)$result['nom'];
+		}
+
 		// Création du nouvel utilisateur
-		$req = $bdd->prepare('INSERT INTO login(id_systeme, password, alive) VALUES(:id_systeme, :password, :alive)');
+		$req = $bdd->prepare('INSERT INTO login(id_systeme, password, alive, piscinier) VALUES(:id_systeme, :password, :alive, :piscinier)');
 		$req->execute(array(
 			'id_systeme' => (string)$_GET['id_systeme'],
 			'password' => $pass_hache,
-			'alive' => (string)$_GET['alive']
+			'alive' => (string)$_GET['alive'],
+			'piscinier' => $piscinier
 		));
 
 		// Récupération de l'ID du nouvel utilisateur
@@ -35,7 +46,7 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 		// Création premier evenement
 		$req = $bdd->prepare('INSERT INTO events (id_systeme, texte, couleur, dateheure) VALUES(:id_systeme, :texte, :couleur, :dateheure)');
 		$req->execute(array(
-			'texte' => "Démarrage du système",
+			'texte' => "Création sur le serveur",
 			'couleur' => 0,
 			'dateheure' => $date . '-' . $heure,
 			'id_systeme' => (int)$result['id']

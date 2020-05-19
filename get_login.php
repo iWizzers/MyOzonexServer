@@ -3,7 +3,20 @@ include("bdd_connect.php");
 
 $pass = false;
 
-if (isset($_GET['id_systeme'])) {
+if (isset($_GET['piscinier']) AND isset($_GET['password'])) {
+	$req = $bdd->prepare('SELECT password FROM pisciniers WHERE nom = :piscinier');
+	$req->execute(array(
+		'piscinier' => (string)$_GET['piscinier']
+	));
+	$result = $req->fetch();
+
+	// Comparaison de l'utilisateur envoyé via le formulaire avec la base
+	$isPasswordCorrect = password_verify((string)$_GET['password'], (string)$result['password']);
+
+	if ($result AND $isPasswordCorrect) {
+		$pass = true;
+	}
+} elseif (isset($_GET['id_systeme'])) {
 	if (isset($_GET['password'])) {
 		$req = $bdd->prepare('SELECT id, password FROM login WHERE id_systeme = :id_systeme');
 		$req->execute(array(
@@ -17,7 +30,7 @@ if (isset($_GET['id_systeme'])) {
 		if ($result AND $isPasswordCorrect) {
 			$pass = true;
 		}
-	} else if (isset($_GET['admin'])) {
+	} elseif (isset($_GET['admin'])) {
 		$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'id_systeme' => (string)$_GET['id_systeme']

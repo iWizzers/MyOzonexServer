@@ -243,6 +243,123 @@ if (isset($_GET['id_systeme'])) {
 			'version' => (string)$_GET['version'],
 			'id_systeme' => (string)$_GET['id_systeme']
 			));
+	} elseif (isset($_GET['type_appareil'])) {
+		$req = $bdd->prepare('UPDATE login SET type_appareil = :type_appareil WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'type_appareil' => (string)$_GET['type_appareil'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+	} elseif (isset($_GET['piscinier'])) {
+		$req = $bdd->prepare('UPDATE login SET piscinier = :piscinier WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'piscinier' => (string)$_GET['piscinier'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+	} elseif (isset($_GET['delete'])) {
+		$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (string)$_GET['id_systeme']));
+		$result = $req->fetch();
+
+		$req = $bdd->prepare('DELETE FROM algicide WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM automatisation WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM bassin WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM capteurs WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM chauffage WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM eclairage WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM electrolyseur WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM events WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM filtre WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM horlogerie WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM lampes_uv WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM login WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+
+		$req = $bdd->prepare('DELETE FROM messages WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM ozonateur WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM pompe_filtration WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM regulateur_orp WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM regulateur_ph WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM regulateur_ph_moins WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM regulateur_ph_plus WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM surpresseur WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>

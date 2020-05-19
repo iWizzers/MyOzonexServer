@@ -6,13 +6,20 @@ header('Content-Type: application/json');
 $login_count = 0;
 $data_users = array();
 
-$req = $bdd->prepare('SELECT id_systeme, proprietaire, coordonnees, ville, type_connexion, alive, version_qseven, version, block FROM login ORDER BY proprietaire ASC');
-$req->execute();
-$donnees = $req->fetch(); // Saute utilisateur "admin"
+if (isset($_GET['piscinier'])) {
+	$req = $bdd->prepare('SELECT * FROM login WHERE piscinier = :piscinier ORDER BY proprietaire ASC');
+	$req->execute(array(
+		'piscinier' => (string)$_GET['piscinier']
+		));
+} else {
+	$req = $bdd->prepare('SELECT * FROM login ORDER BY proprietaire ASC');
+	$req->execute();
+	$donnees = $req->fetch(); // Saute utilisateur "admin"
+}
 
 while ($donnees = $req->fetch())
 {
-	$data = [ 'id_systeme' => (string)$donnees['id_systeme'], 'proprietaire' => (string)$donnees['proprietaire'], 'coordonnees' => (string)$donnees['coordonnees'], 'ville' => (string)$donnees['ville'], 'type_connexion' => (int)$donnees['type_connexion'], 'alive' => (string)$donnees['alive'], 'version_qseven' => (int)$donnees['version_qseven'], 'version' => (string)$donnees['version'], 'blocage' => (int)$donnees['block'] ];
+	$data = [ 'id_systeme' => (string)$donnees['id_systeme'], 'proprietaire' => (string)$donnees['proprietaire'], 'coordonnees' => (string)$donnees['coordonnees'], 'ville' => (string)$donnees['ville'], 'type_connexion' => (int)$donnees['type_connexion'], 'alive' => (string)$donnees['alive'], 'version_qseven' => (int)$donnees['version_qseven'], 'version' => (string)$donnees['version'], 'blocage' => (int)$donnees['block'], 'type_appareil' => (int)$donnees['type_appareil'], 'piscinier' => (string)$donnees['piscinier'] ];
 	$data_users += [ "user" . strval(++$login_count) => $data ];
 }
 
