@@ -858,6 +858,8 @@ if (isset($_GET['id_systeme'])) {
 			echo ';';
 			echo (int)$donnees['multiplicateur_diff'];
 			echo ';';
+			echo (string)$donnees['duree_injection_minimum'];
+			echo ';';
 			echo (string)$donnees['duree_injection'];
 			echo ';';
 			echo (string)$donnees['temps_reponse'];
@@ -896,6 +898,8 @@ if (isset($_GET['id_systeme'])) {
 			echo (int)$donnees['duree_cycle'];
 			echo ';';
 			echo (int)$donnees['multiplicateur_diff'];
+			echo ';';
+			echo (string)$donnees['duree_injection_minimum'];
 			echo ';';
 			echo (string)$donnees['duree_injection'];
 			echo ';';
@@ -945,6 +949,8 @@ if (isset($_GET['id_systeme'])) {
 			echo (int)$donnees['duree_cycle'];
 			echo ';';
 			echo (int)$donnees['multiplicateur_diff'];
+			echo ';';
+			echo (string)$donnees['duree_injection_minimum'];
 			echo ';';
 			echo (string)$donnees['duree_injection'];
 			echo ';';
