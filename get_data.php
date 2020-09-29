@@ -14,13 +14,23 @@ if (isset($_GET['id_systeme'])) {
 	$version = (string)$donnees['version'];
 
 	if ($id != null) {
-		if ((int)$donnees['type_appareil'] == 1) {
+		if ((string)$_GET['type_donnees'] != "bracket") {
 			// Système
-			$data_systeme = array(
-				'alive' => (string)$donnees['alive'],
-				'blocage' => (int)$donnees['block'],
-				'background' => (int)$donnees['background']
-			);
+			if (((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3')) || ((explode(".", $version)[0] > '2'))) {
+				$data_systeme = array(
+					'alive' => (string)$donnees['alive'],
+					'blocage' => (int)$donnees['block'],
+					'background' => (int)$donnees['background'],
+					'restart' => (int)$donnees['restart'],
+					'version' => $version
+				);
+			} else {
+				$data_systeme = array(
+					'alive' => (string)$donnees['alive'],
+					'blocage' => (int)$donnees['block'],
+					'background' => (int)$donnees['background']
+				);
+			}
 
 			$req->closeCursor();
 
@@ -352,23 +362,44 @@ if (isset($_GET['id_systeme'])) {
 
 			$donnees = $req->fetch();
 
-			$data_ph_moins = array(
-				'installe' => (int)$donnees['installe'],
-				'etat' => (int)$donnees['etat'],
-				'date_consommation' => (string)$donnees['date_consommation'],
-				'volume' => (float)$donnees['volume'],
-				'volume_restant' => (float)$donnees['volume_restant'],
-				'consommation_jour' => (float)$donnees['consommation_jour'],
-				'consommation_semaine' => (float)$donnees['consommation_semaine'],
-				'consommation_mois' => (float)$donnees['consommation_mois'],
-				'injection' => (int)$donnees['injection'],
-				'duree_cycle' => (int)$donnees['duree_cycle'],
-				'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
-				'duree_injection' => (string)$donnees['duree_injection'],
-				'temps_reponse' => (string)$donnees['temps_reponse'],
-				'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
-				'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant']
-			);
+			if (((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '4')) || ((explode(".", $version)[0] > '2'))) {
+				$data_ph_moins = array(
+					'installe' => (int)$donnees['installe'],
+					'etat' => (int)$donnees['etat'],
+					'date_consommation' => (string)$donnees['date_consommation'],
+					'volume' => (float)$donnees['volume'],
+					'volume_restant' => (float)$donnees['volume_restant'],
+					'consommation_jour' => (float)$donnees['consommation_jour'],
+					'consommation_semaine' => (float)$donnees['consommation_semaine'],
+					'consommation_mois' => (float)$donnees['consommation_mois'],
+					'injection' => (int)$donnees['injection'],
+					'duree_cycle' => (int)$donnees['duree_cycle'],
+					'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
+					'duree_injection_minimum' => (string)$donnees['duree_injection_minimum'],
+					'duree_injection' => (string)$donnees['duree_injection'],
+					'temps_reponse' => (string)$donnees['temps_reponse'],
+					'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
+					'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant']
+				);
+			} else {
+				$data_ph_moins = array(
+					'installe' => (int)$donnees['installe'],
+					'etat' => (int)$donnees['etat'],
+					'date_consommation' => (string)$donnees['date_consommation'],
+					'volume' => (float)$donnees['volume'],
+					'volume_restant' => (float)$donnees['volume_restant'],
+					'consommation_jour' => (float)$donnees['consommation_jour'],
+					'consommation_semaine' => (float)$donnees['consommation_semaine'],
+					'consommation_mois' => (float)$donnees['consommation_mois'],
+					'injection' => (int)$donnees['injection'],
+					'duree_cycle' => (int)$donnees['duree_cycle'],
+					'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
+					'duree_injection' => (string)$donnees['duree_injection'],
+					'temps_reponse' => (string)$donnees['temps_reponse'],
+					'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
+					'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant']
+				);
+			}
 
 			$req->closeCursor();
 
@@ -381,23 +412,44 @@ if (isset($_GET['id_systeme'])) {
 
 			$donnees = $req->fetch();
 
-			$data_ph_plus = array(
-				'installe' => (int)$donnees['installe'],
-				'etat' => (int)$donnees['etat'],
-				'date_consommation' => (string)$donnees['date_consommation'],
-				'volume' => (float)$donnees['volume'],
-				'volume_restant' => (float)$donnees['volume_restant'],
-				'consommation_jour' => (float)$donnees['consommation_jour'],
-				'consommation_semaine' => (float)$donnees['consommation_semaine'],
-				'consommation_mois' => (float)$donnees['consommation_mois'],
-				'injection' => (int)$donnees['injection'],
-				'duree_cycle' => (int)$donnees['duree_cycle'],
-				'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
-				'duree_injection' => (string)$donnees['duree_injection'],
-				'temps_reponse' => (string)$donnees['temps_reponse'],
-				'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
-				'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant']
-			);
+			if (((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '4')) || ((explode(".", $version)[0] > '2'))) {
+				$data_ph_plus = array(
+					'installe' => (int)$donnees['installe'],
+					'etat' => (int)$donnees['etat'],
+					'date_consommation' => (string)$donnees['date_consommation'],
+					'volume' => (float)$donnees['volume'],
+					'volume_restant' => (float)$donnees['volume_restant'],
+					'consommation_jour' => (float)$donnees['consommation_jour'],
+					'consommation_semaine' => (float)$donnees['consommation_semaine'],
+					'consommation_mois' => (float)$donnees['consommation_mois'],
+					'injection' => (int)$donnees['injection'],
+					'duree_cycle' => (int)$donnees['duree_cycle'],
+					'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
+					'duree_injection_minimum' => (string)$donnees['duree_injection_minimum'],
+					'duree_injection' => (string)$donnees['duree_injection'],
+					'temps_reponse' => (string)$donnees['temps_reponse'],
+					'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
+					'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant']
+				);
+			} else {
+				$data_ph_plus = array(
+					'installe' => (int)$donnees['installe'],
+					'etat' => (int)$donnees['etat'],
+					'date_consommation' => (string)$donnees['date_consommation'],
+					'volume' => (float)$donnees['volume'],
+					'volume_restant' => (float)$donnees['volume_restant'],
+					'consommation_jour' => (float)$donnees['consommation_jour'],
+					'consommation_semaine' => (float)$donnees['consommation_semaine'],
+					'consommation_mois' => (float)$donnees['consommation_mois'],
+					'injection' => (int)$donnees['injection'],
+					'duree_cycle' => (int)$donnees['duree_cycle'],
+					'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
+					'duree_injection' => (string)$donnees['duree_injection'],
+					'temps_reponse' => (string)$donnees['temps_reponse'],
+					'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
+					'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant']
+				);
+			}
 
 			$req->closeCursor();
 
@@ -410,36 +462,70 @@ if (isset($_GET['id_systeme'])) {
 
 			$donnees = $req->fetch();
 
-			$data_regulateur_orp = array(
-				'installe' => (int)$donnees['installe'],
-				'point_consigne_orp' => (int)$donnees['point_consigne_orp'],
-				'hysteresis_orp' => (int)$donnees['hysteresis_orp'],
-				'point_consigne_ampero' => (float)$donnees['point_consigne_ampero'],
-				'hysteresis_ampero' => (float)$donnees['hysteresis_ampero'],
-				'chlore_libre_actif' => (float)$donnees['chlore_libre_actif'],
-				'etat' => (int)$donnees['etat'],
-				'date_consommation' => (string)$donnees['date_consommation'],
-				'volume' => (float)$donnees['volume'],
-				'volume_restant' => (float)$donnees['volume_restant'],
-				'consommation_jour' => (float)$donnees['consommation_jour'],
-				'consommation_semaine' => (float)$donnees['consommation_semaine'],
-				'consommation_mois' => (float)$donnees['consommation_mois'],
-				'injection' => (int)$donnees['injection'],
-				'duree_cycle' => (int)$donnees['duree_cycle'],
-				'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
-				'duree_injection' => (string)$donnees['duree_injection'],
-				'temps_reponse' => (string)$donnees['temps_reponse'],
-				'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
-				'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant'],
-				'surchloration' => (int)$donnees['surchloration'],
-				'frequence' => (string)$donnees['frequence'],
-				'mv_ajoute' => (int)$donnees['mv_ajoute'],
-				'prochaine_surchloration' => (int)$donnees['prochaine_surchloration'],
-				'alarme_seuil_bas_ampero' => (float)$donnees['alarme_seuil_bas_ampero'],
-				'alarme_seuil_haut_ampero' => (float)$donnees['alarme_seuil_haut_ampero'],
-				'alarme_seuil_bas_orp' => (int)$donnees['alarme_seuil_bas_orp'],
-				'alarme_seuil_haut_orp' => (int)$donnees['alarme_seuil_haut_orp']
-			);
+			if (((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '4')) || ((explode(".", $version)[0] > '2'))) {
+				$data_regulateur_orp = array(
+					'installe' => (int)$donnees['installe'],
+					'point_consigne_orp' => (int)$donnees['point_consigne_orp'],
+					'hysteresis_orp' => (int)$donnees['hysteresis_orp'],
+					'point_consigne_ampero' => (float)$donnees['point_consigne_ampero'],
+					'hysteresis_ampero' => (float)$donnees['hysteresis_ampero'],
+					'chlore_libre_actif' => (float)$donnees['chlore_libre_actif'],
+					'etat' => (int)$donnees['etat'],
+					'date_consommation' => (string)$donnees['date_consommation'],
+					'volume' => (float)$donnees['volume'],
+					'volume_restant' => (float)$donnees['volume_restant'],
+					'consommation_jour' => (float)$donnees['consommation_jour'],
+					'consommation_semaine' => (float)$donnees['consommation_semaine'],
+					'consommation_mois' => (float)$donnees['consommation_mois'],
+					'injection' => (int)$donnees['injection'],
+					'duree_cycle' => (int)$donnees['duree_cycle'],
+					'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
+					'duree_injection_minimum' => (string)$donnees['duree_injection_minimum'],
+					'duree_injection' => (string)$donnees['duree_injection'],
+					'temps_reponse' => (string)$donnees['temps_reponse'],
+					'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
+					'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant'],
+					'surchloration' => (int)$donnees['surchloration'],
+					'frequence' => (string)$donnees['frequence'],
+					'mv_ajoute' => (int)$donnees['mv_ajoute'],
+					'prochaine_surchloration' => (int)$donnees['prochaine_surchloration'],
+					'alarme_seuil_bas_ampero' => (float)$donnees['alarme_seuil_bas_ampero'],
+					'alarme_seuil_haut_ampero' => (float)$donnees['alarme_seuil_haut_ampero'],
+					'alarme_seuil_bas_orp' => (int)$donnees['alarme_seuil_bas_orp'],
+					'alarme_seuil_haut_orp' => (int)$donnees['alarme_seuil_haut_orp']
+				);
+			} else {
+				$data_regulateur_orp = array(
+					'installe' => (int)$donnees['installe'],
+					'point_consigne_orp' => (int)$donnees['point_consigne_orp'],
+					'hysteresis_orp' => (int)$donnees['hysteresis_orp'],
+					'point_consigne_ampero' => (float)$donnees['point_consigne_ampero'],
+					'hysteresis_ampero' => (float)$donnees['hysteresis_ampero'],
+					'chlore_libre_actif' => (float)$donnees['chlore_libre_actif'],
+					'etat' => (int)$donnees['etat'],
+					'date_consommation' => (string)$donnees['date_consommation'],
+					'volume' => (float)$donnees['volume'],
+					'volume_restant' => (float)$donnees['volume_restant'],
+					'consommation_jour' => (float)$donnees['consommation_jour'],
+					'consommation_semaine' => (float)$donnees['consommation_semaine'],
+					'consommation_mois' => (float)$donnees['consommation_mois'],
+					'injection' => (int)$donnees['injection'],
+					'duree_cycle' => (int)$donnees['duree_cycle'],
+					'multiplicateur_diff' => (int)$donnees['multiplicateur_diff'],
+					'duree_injection' => (string)$donnees['duree_injection'],
+					'temps_reponse' => (string)$donnees['temps_reponse'],
+					'temps_injection_jour_max' => (int)$donnees['temps_injection_jour_max'],
+					'temps_injection_jour_max_restant' => (int)$donnees['temps_injection_jour_max_restant'],
+					'surchloration' => (int)$donnees['surchloration'],
+					'frequence' => (string)$donnees['frequence'],
+					'mv_ajoute' => (int)$donnees['mv_ajoute'],
+					'prochaine_surchloration' => (int)$donnees['prochaine_surchloration'],
+					'alarme_seuil_bas_ampero' => (float)$donnees['alarme_seuil_bas_ampero'],
+					'alarme_seuil_haut_ampero' => (float)$donnees['alarme_seuil_haut_ampero'],
+					'alarme_seuil_bas_orp' => (int)$donnees['alarme_seuil_bas_orp'],
+					'alarme_seuil_haut_orp' => (int)$donnees['alarme_seuil_haut_orp']
+				);
+			}
 
 			$req->closeCursor();
 
@@ -592,7 +678,7 @@ if (isset($_GET['id_systeme'])) {
 			);
 
 			echo json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-		} elseif ((int)$donnees['type_appareil'] == 2) {
+		} else {
 			echo '<';
 
 

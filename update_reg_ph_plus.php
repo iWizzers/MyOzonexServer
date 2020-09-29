@@ -69,6 +69,12 @@ if (isset($_GET['id_systeme'])) {
 			'multiplicateur_diff' => (int)$_GET['multiplicateur_diff'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['duree_injection_minimum'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph_plus SET duree_injection_minimum = :duree_injection_minimum WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'duree_injection_minimum' => (string)$_GET['duree_injection_minimum'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['duree_injection'])) {
 		$req = $bdd->prepare('UPDATE regulateur_ph_plus SET duree_injection = :duree_injection WHERE id_systeme = :id_systeme');
 		$req->execute(array(

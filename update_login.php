@@ -246,7 +246,7 @@ if (isset($_GET['id_systeme'])) {
 	} elseif (isset($_GET['type_appareil'])) {
 		$req = $bdd->prepare('UPDATE login SET type_appareil = :type_appareil WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'type_appareil' => (string)$_GET['type_appareil'],
+			'type_appareil' => (int)$_GET['type_appareil'],
 			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['piscinier'])) {
@@ -359,6 +359,12 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('DELETE FROM surpresseur WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['restart'])) {
+		$req = $bdd->prepare('UPDATE login SET restart = :restart WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'restart' => (int)$_GET['restart'],
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	}
 }
