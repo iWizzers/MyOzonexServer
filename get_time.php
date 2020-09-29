@@ -23,7 +23,7 @@ if (isset($_GET['id_systeme'])) {
         echo '<';
     }
 
-	echo get_datetime_from_nearest_timezone(get_coordinates((string)$donnees['ville']));
+	echo get_datetime_from_nearest_timezone(get_coordinates((string)$donnees['ville']), (int)$donnees['type_appareil']);
 
     if ((int)$donnees['type_appareil'] == 2) {
         echo '>';

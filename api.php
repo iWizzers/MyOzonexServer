@@ -36,7 +36,7 @@ function get_datetime_from_google_api($coordinates) {
 }
 
 
-function get_datetime_from_nearest_timezone($coordinates) {
+function get_datetime_from_nearest_timezone($coordinates, $type_appareil=1) {
     $timezone_ids = DateTimeZone::listIdentifiers();
 
     if($timezone_ids && is_array($timezone_ids) && isset($timezone_ids[0])) {
@@ -68,7 +68,7 @@ function get_datetime_from_nearest_timezone($coordinates) {
         }
 
         $date = new DateTime("now", new DateTimeZone($time_zone));
-        return  $date->format('d/m/Y H:i:s');
+        return  $date->format(($type_appareil == 2 ? 'N/' : '') . 'd/m/Y H:i:s');
     }
 
     return 'Unknown';
