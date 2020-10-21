@@ -12,11 +12,22 @@ $req->execute();
 
 while ($donnees = $req->fetch())
 {
-	$data = [ 'nom' => (string)$donnees['nom'], 'nb_appareils' => (int)$donnees['nb_appareils'], 'blocage' => (int)$donnees['blocage'] ];
+	$data = [ 'nom' => (string)$donnees['nom'], 'blocage' => (int)$donnees['blocage'] ];
 	$data_pisciniers += [ 'piscinier' . strval(++$count) => $data ];
 }
 
 $req->closeCursor();
+
+
+for ($i = 0; $i < $count; $i++) {
+	$req = $bdd->prepare('SELECT COUNT(*) AS num FROM login WHERE piscinier = :piscinier');
+	$req->execute(array(
+		'piscinier' => $data_pisciniers['piscinier' . strval($i + 1)]['nom']
+		));
+	$donnees = $req->fetch();
+	$data_pisciniers['piscinier' . strval($i + 1)]['nb_appareils'] = (int)$donnees['num'];
+	$req->closeCursor();
+}
 
 
 // Format d'envoi

@@ -255,6 +255,12 @@ if (isset($_GET['id_systeme'])) {
 			'piscinier' => (string)$_GET['piscinier'],
 			'id_systeme' => (string)$_GET['id_systeme']
 			));
+	} elseif (isset($_GET['manipulation_client'])) {
+		$req = $bdd->prepare('UPDATE login SET manipulation_client = :manipulation_client WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'manipulation_client' => (int)$_GET['manipulation_client'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
 	} elseif (isset($_GET['delete'])) {
 		$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
 		$req->execute(array(

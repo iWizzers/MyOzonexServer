@@ -11,16 +11,30 @@ if (isset($_GET['id_systeme'])) {
 	$donnees = $req->fetch();
 
 	$id = (int)$donnees['id'];
-	$version = (string)$donnees['version'];
+
+	if (count(explode(" - ", (string)$donnees['version'])) == 2) {
+		$version = explode(" - ", (string)$donnees['version'])[1];
+	} else {
+		$version = (string)$donnees['version'];
+	}
 
 	if ($id != null) {
 		if ((string)$_GET['type_donnees'] != "bracket") {
 			// Système
-			if (((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3')) || ((explode(".", $version)[0] > '2'))) {
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[1] < '6')) {
 				$data_systeme = array(
 					'alive' => (string)$donnees['alive'],
 					'blocage' => (int)$donnees['block'],
 					'background' => (int)$donnees['background'],
+					'restart' => (int)$donnees['restart'],
+					'version' => $version
+				);
+			} elseif (((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6')) || ((explode(".", $version)[0] > '2'))) {
+				$data_systeme = array(
+					'alive' => (string)$donnees['alive'],
+					'blocage' => (int)$donnees['block'],
+					'background' => (int)$donnees['background'],
+					'manipulation_client' => (int)$donnees['manipulation_client'],
 					'restart' => (int)$donnees['restart'],
 					'version' => $version
 				);
