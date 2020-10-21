@@ -34,6 +34,8 @@ if (isset($_GET['os']) && isset($_GET['version']) && isset($_GET['utilisateur'])
 			$dir_name = $dir_name . '/B1';
 		} elseif ((int)$result['version_qseven'] == 2) {
 			$dir_name = $dir_name . '/B4';
+		} elseif ((int)$result['version_qseven'] == 3) {
+			$dir_name = $dir_name . '/B5';
 		}
 	}
 
