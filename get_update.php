@@ -9,7 +9,7 @@ if (isset($_GET['os']) && isset($_GET['version']) && isset($_GET['utilisateur'])
 	$zip_name = scandir($dir_name)[2];
 	$zip = $dir_name . '/' . $zip_name;
 
-	if (file_exists($zip) && ($version != (string)$_GET['version'])) {
+	if (file_exists($zip) && ($new_version != (string)$_GET['version'])) {
 		header('Content-Type: application/exe');
 		header('Content-disposition: attachment; filename=' . $zip_name);
 		header('Content-Length: ' . filesize($zip));

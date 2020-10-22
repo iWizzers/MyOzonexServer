@@ -2,7 +2,7 @@
 $API_KEY='AIzaSyCxVtrpaAk7ZQljPxI_tGHuSeOPcQNlzb8';
 
 
-function get_coordinates($address) {
+function get_coordinates_from_google_api($address) {
     global $API_KEY;
     $prepAddr = str_replace(' ','+',$address);
 	$geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false&key='.$API_KEY);
@@ -24,7 +24,6 @@ function get_datetime_from_google_api($coordinates) {
 	curl_close($ch);
 	 
 	$response = json_decode($responseJson);
-	//var_dump($response);
 	$timezone = $response->timeZoneId;
 	$date = new DateTime("now");
 
@@ -58,7 +57,6 @@ function get_datetime_from_nearest_timezone($coordinates, $type_appareil=1) {
                 + (cos(deg2rad($coordinates[0])) * cos(deg2rad($tz_lat)) * cos(deg2rad($theta)));
                 $distance = acos($distance);
                 $distance = abs(rad2deg($distance));
-                // echo '<br />'.$timezone_id.' '.$distance; 
 
                 if (!$time_zone || $tz_distance > $distance) {
                     $time_zone   = $timezone_id;
@@ -97,7 +95,6 @@ function get_timezone_from_coordinates($coordinates) {
                 + (cos(deg2rad($coordinates[0])) * cos(deg2rad($tz_lat)) * cos(deg2rad($theta)));
                 $distance = acos($distance);
                 $distance = abs(rad2deg($distance));
-                // echo '<br />'.$timezone_id.' '.$distance; 
 
                 if (!$time_zone || $tz_distance > $distance) {
                     $time_zone   = $timezone_id;
@@ -109,5 +106,14 @@ function get_timezone_from_coordinates($coordinates) {
 
     $date = new DateTime("now", new DateTimeZone($time_zone));
     return  'GMT' . $date->format('P');
+}
+
+function get_address($lat, $lon)
+{
+    $url = 'https://nominatim.openstreetmap.org/reverse?';
+    $params = http_build_query(array('lat' => $lat, 'lon' => $lon, 'format' => 'json', 'zoom' => '21', 'limit' => '1'));
+
+    $output = json_decode(file_get_contents($url.$params), true);
+    return $output[0]['display_name'];
 }
 ?>
