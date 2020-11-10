@@ -35,46 +35,9 @@ function get_datetime_from_google_api($coordinates) {
 }
 
 
-function get_datetime_from_nearest_timezone($coordinates, $type_appareil=1) {
-    $timezone_ids = DateTimeZone::listIdentifiers();
-
-    if($timezone_ids && is_array($timezone_ids) && isset($timezone_ids[0])) {
-        $time_zone = '';
-        $tz_distance = 0;
-
-        //only one identifier?
-        if (count($timezone_ids) == 1) {
-            $time_zone = $timezone_ids[0];
-        } else {
-            foreach($timezone_ids as $timezone_id) {
-                $timezone = new DateTimeZone($timezone_id);
-                $location = $timezone->getLocation();
-                $tz_lat   = $location['latitude'];
-                $tz_long  = $location['longitude'];
-
-                $theta    = $coordinates[1] - $tz_long;
-                $distance = (sin(deg2rad($coordinates[0])) * sin(deg2rad($tz_lat))) 
-                + (cos(deg2rad($coordinates[0])) * cos(deg2rad($tz_lat)) * cos(deg2rad($theta)));
-                $distance = acos($distance);
-                $distance = abs(rad2deg($distance));
-
-                if (!$time_zone || $tz_distance > $distance) {
-                    $time_zone   = $timezone_id;
-                    $tz_distance = $distance;
-                } 
-            }
-        }
-
-        $date = new DateTime("now", new DateTimeZone($time_zone));
-        return  $date->format(($type_appareil == 2 ? 'N/' : '') . 'd/m/Y H:i:s');
-    }
-
-    return 'Unknown';
-}
-
-
-function get_timezone_from_coordinates($coordinates) {
-    $timezone_ids = DateTimeZone::listIdentifiers();
+function get_datetime_from_coordinates($coordinates, $country_code = '') {
+    $timezone_ids = ($country_code) ? DateTimeZone::listIdentifiers(DateTimeZone::PER_COUNTRY, $country_code)
+                                    : DateTimeZone::listIdentifiers();
     $time_zone = '';
 
     if($timezone_ids && is_array($timezone_ids) && isset($timezone_ids[0])) {
@@ -99,21 +62,20 @@ function get_timezone_from_coordinates($coordinates) {
                 if (!$time_zone || $tz_distance > $distance) {
                     $time_zone   = $timezone_id;
                     $tz_distance = $distance;
-                } 
+                }
             }
         }
     }
 
-    $date = new DateTime("now", new DateTimeZone($time_zone));
-    return  'GMT' . $date->format('P');
+    return new DateTime("now", new DateTimeZone($time_zone));
 }
 
-function get_address($lat, $lon)
-{
-    $url = 'https://nominatim.openstreetmap.org/reverse?';
-    $params = http_build_query(array('lat' => $lat, 'lon' => $lon, 'format' => 'json', 'zoom' => '21', 'limit' => '1'));
 
-    $output = json_decode(file_get_contents($url.$params), true);
-    return $output[0]['display_name'];
+function get_coordinates_from_address($address) {
+    $geocode = file_get_contents('http://open.mapquestapi.com/geocoding/v1/address?key=0t7AdxmKbrlWocm0Kvb4m6jtxGKPaICz&location=' . $address);
+    $output = json_decode($geocode);
+    $latitude = $output->results[0]->locations[0]->latLng->lat;
+    $longitude = $output->results[0]->locations[0]->latLng->lng;
+    return array($latitude, $longitude);
 }
 ?>

@@ -208,6 +208,12 @@ if (isset($_GET['id_systeme'])) {
 			'coordonnees' => (string)$_GET['coordonnees'],
 			'id_systeme' => (string)$_GET['id_systeme']
 			));
+	} elseif (isset($_GET['ville'])) {
+		$req = $bdd->prepare('UPDATE login SET ville = :ville WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'ville' => (string)$_GET['ville'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
 	} elseif (isset($_GET['type_connexion'])) {
 		$req = $bdd->prepare('UPDATE login SET type_connexion = :type_connexion WHERE id_systeme = :id_systeme');
 		$req->execute(array(

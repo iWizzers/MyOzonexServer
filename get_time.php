@@ -6,32 +6,18 @@ header('Content-Type: application/json');
 
 
 if (isset($_GET['id_systeme'])) {
-    /*$address = getaddress(explode(",", $details->loc)[0], explode(",", $details->loc)[1]);
-    if ($address) {
-        echo $address . "<br>";
-    } else {
-        echo "Not found<br>";
-    }*/
-
-    $details = json_decode(file_get_contents("http://ipinfo.io/{$_SERVER['REMOTE_ADDR']}/json"));
-    $date = new DateTime("now", new DateTimeZone($details->timezone));
-
-    $req = $bdd->prepare('UPDATE login SET ville = :ville WHERE id_systeme = :id_systeme');
-    $req->execute(array(
-        'ville' => $details->postal . ' ' . $details->city . ', ' . $details->country,
-        'id_systeme' => (string)$_GET['id_systeme']
-        ));
-
-    $req = $bdd->prepare('SELECT id, type_appareil FROM login WHERE id_systeme = :id_systeme');
+    $req = $bdd->prepare('SELECT id, ville, type_appareil FROM login WHERE id_systeme = :id_systeme');
     $req->execute(array(
         'id_systeme' => (string)$_GET['id_systeme']));
     $donnees = $req->fetch();
     $req->closeCursor();
 
+    $date = get_datetime_from_coordinates(get_coordinates_from_address((string)$donnees['ville']));
+
     $req = $bdd->prepare('UPDATE horlogerie SET index_gmt = :index_gmt, timezone = :timezone WHERE id_systeme = :id_systeme');
     $req->execute(array(
         'index_gmt' => 'GMT' . $date->format('P'),
-        'timezone' => $details->timezone,
+        'timezone' => $date->getTimezone()->getName(),
         'id_systeme' => (int)$donnees['id']
         ));
 
