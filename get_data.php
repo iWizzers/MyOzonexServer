@@ -982,13 +982,13 @@ if (isset($_GET['id_systeme'])) {
 			echo ';';
 			echo (int)$donnees['alarme_seuil_haut_orp'];
 			echo ';';
-			echo (int)$donnees['surchloration'],
+			echo (int)$donnees['surchloration'];
 			echo ';';
-			echo (string)$donnees['frequence'],
+			echo (string)$donnees['frequence'];
 			echo ';';
-			echo (int)$donnees['mv_ajoute'],
+			echo (int)$donnees['mv_ajoute'];
 			echo ';';
-			echo (int)$donnees['prochaine_surchloration'],
+			echo (int)$donnees['prochaine_surchloration'];
 			echo ';';
 			$req->closeCursor();
 
@@ -1028,23 +1028,23 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => $id
 				));
 			$donnees = $req->fetch();
-			echo (int)$donnees['donnees_equipement'],
+			echo (int)$donnees['donnees_equipement'];
 			echo ';';
-			echo (int)$donnees['modif_plage_auto'],
+			echo (int)$donnees['modif_plage_auto'];
 			echo ';';
-			echo (int)$donnees['plages_auto'],
+			echo (int)$donnees['plages_auto'];
 			echo ';';
-			echo (string)$donnees['debut_plage_auto'],
+			echo (string)$donnees['debut_plage_auto'];
 			echo ';';
-			echo (string)$donnees['temps_filtration_jour'],
+			echo (string)$donnees['temps_filtration_jour'];
 			echo ';';
-			echo (int)$donnees['asservissement_ph_plus'],
+			echo (int)$donnees['asservissement_ph_plus'];
 			echo ';';
-			echo (int)$donnees['asservissement_ph_moins'],
+			echo (int)$donnees['asservissement_ph_moins'];
 			echo ';';
-			echo (int)$donnees['asservissement_orp'],
+			echo (int)$donnees['asservissement_orp'];
 			echo ';';
-			echo (int)$donnees['consigne_orp_auto']
+			echo (int)$donnees['consigne_orp_auto'];
 			$req->closeCursor();
 
 
