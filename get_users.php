@@ -8,16 +8,9 @@ $data_users = array();
 
 $version = isset($_GET['version']) ? $_GET['version'] : '1.0.0';
 
-if (isset($_GET['piscinier'])) {
-	$req = $bdd->prepare('SELECT * FROM login WHERE piscinier = :piscinier ORDER BY proprietaire ASC');
-	$req->execute(array(
-		'piscinier' => (string)$_GET['piscinier']
-		));
-} else {
-	$req = $bdd->prepare('SELECT * FROM login ORDER BY proprietaire ASC');
-	$req->execute();
-	$donnees = $req->fetch(); // Saute utilisateur "admin"
-}
+$req = $bdd->prepare('SELECT * FROM login ORDER BY proprietaire ASC');
+$req->execute();
+$donnees = $req->fetch(); // Saute utilisateur "admin"
 
 while ($donnees = $req->fetch())
 {

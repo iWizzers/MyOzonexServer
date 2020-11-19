@@ -4,7 +4,37 @@ include("api.php");
 
 
 if (isset($_GET['id_systeme'])) {
-	if (isset($_GET['alive'])) {
+	if (isset($_GET['password'])) {
+		$pass_hache = password_hash($_GET['password'], PASSWORD_DEFAULT);
+
+		if (isset($_GET['piscinier'])) {
+			$req = $bdd->prepare('SELECT id FROM pisciniers WHERE nom = :nom');
+			$req->execute(array(
+				'nom' => (string)$_GET['piscinier']
+				));
+			$donnees = $req->fetch();
+			$req->closeCursor();
+
+			$req = $bdd->prepare('UPDATE pisciniers SET password = :password WHERE id = :id');
+			$req->execute(array(
+				'password' => $pass_hache,
+				'id' => (int)$donnees['id']
+				));
+		} else {
+			$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
+			$req->execute(array(
+				'id_systeme' => (string)$_GET['id_systeme']
+				));
+			$donnees = $req->fetch();
+			$req->closeCursor();
+
+			$req = $bdd->prepare('UPDATE login SET password = :password WHERE id = :id');
+			$req->execute(array(
+				'password' => $pass_hache,
+				'id' => (int)$donnees['id']
+				));
+		}
+	} elseif (isset($_GET['alive'])) {
 		include 'create_save.php';
 
 		// Appareil de démonstration
