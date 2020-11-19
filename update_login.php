@@ -268,6 +268,12 @@ if (isset($_GET['id_systeme'])) {
 			'piscinier' => (string)$_GET['piscinier'],
 			'id_systeme' => (string)$_GET['id_systeme']
 			));
+	} elseif (isset($_GET['date_pose'])) {
+		$req = $bdd->prepare('UPDATE login SET date_pose = :date_pose WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'date_pose' => (string)$_GET['date_pose'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
 	} elseif (isset($_GET['manipulation_client'])) {
 		$req = $bdd->prepare('UPDATE login SET manipulation_client = :manipulation_client WHERE id_systeme = :id_systeme');
 		$req->execute(array(

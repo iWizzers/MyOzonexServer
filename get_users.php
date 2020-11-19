@@ -22,6 +22,11 @@ if (isset($_GET['piscinier'])) {
 while ($donnees = $req->fetch())
 {
 	$data = [ 'id_systeme' => (string)$donnees['id_systeme'], 'proprietaire' => (string)$donnees['proprietaire'], 'coordonnees' => (string)$donnees['coordonnees'], 'ville' => (string)$donnees['ville'], 'type_connexion' => (int)$donnees['type_connexion'], 'alive' => (string)$donnees['alive'], 'version' => (string)$donnees['version'], 'blocage' => (int)$donnees['block'], 'type_appareil' => (int)$donnees['type_appareil'], 'piscinier' => (string)$donnees['piscinier'] ];
+
+	if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '2')) {
+		$data['date_pose'] = (string)$donnees['date_pose'];
+	}
+
 	$data_users += [ "user" . strval(++$login_count) => $data ];
 }
 
