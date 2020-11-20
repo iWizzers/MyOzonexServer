@@ -37,22 +37,6 @@ if (isset($_GET['id_systeme'])) {
 	} elseif (isset($_GET['alive'])) {
 		include 'create_save.php';
 
-		// Appareil de démonstration
-	    $req = $bdd->prepare('SELECT ville FROM login WHERE id_systeme = :id_systeme');
-	    $req->execute(array(
-	        'id_systeme' => 'DEMO-0001'));
-	    $result = $req->fetch();
-	    $req->closeCursor();
-
-		$date = get_datetime_from_coordinates(get_coordinates_from_address((string)$result['ville']));
-
-		$req = $bdd->prepare('UPDATE login SET alive = :alive WHERE id_systeme = :id_systeme');
-		$req->execute(array(
-			'alive' => $date->format('d/m/Y-H:i'),
-			'id_systeme' => 'DEMO-0001'
-			));
-
-		// Appareil en cours
 		$req = $bdd->prepare('UPDATE login SET alive = :alive WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'alive' => (string)$_GET['alive'],

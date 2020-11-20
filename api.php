@@ -35,6 +35,16 @@ function get_datetime_from_google_api($coordinates) {
 }
 
 
+function get_coordinates_from_address($address) {
+    $key = '0t7AdxmKbrlWocm0Kvb4m6jtxGKPaICz'; // FREE : 15000/mois = 0€
+    $geocode = file_get_contents('https://www.mapquestapi.com/geocoding/v1/address?key=' . $key . '&maxResults=1&location=' . urlencode($address) . '&thumbMaps=false');
+    $output = json_decode($geocode);
+    $latitude = $output->results[0]->locations[0]->latLng->lat;
+    $longitude = $output->results[0]->locations[0]->latLng->lng;
+    return array($latitude, $longitude);
+}
+
+
 function get_datetime_from_coordinates($coordinates, $country_code = '') {
     $timezone_ids = ($country_code) ? DateTimeZone::listIdentifiers(DateTimeZone::PER_COUNTRY, $country_code)
                                     : DateTimeZone::listIdentifiers();
@@ -68,15 +78,5 @@ function get_datetime_from_coordinates($coordinates, $country_code = '') {
     }
 
     return new DateTime("now", new DateTimeZone($time_zone));
-}
-
-
-function get_coordinates_from_address($address) {
-    $key = '0t7AdxmKbrlWocm0Kvb4m6jtxGKPaICz'; // FREE : 15000/mois = 0€
-    $geocode = file_get_contents('https://www.mapquestapi.com/geocoding/v1/address?key=' . $key . '&maxResults=1&location=' . urlencode($address) . '&thumbMaps=false');
-    $output = json_decode($geocode);
-    $latitude = $output->results[0]->locations[0]->latLng->lat;
-    $longitude = $output->results[0]->locations[0]->latLng->lng;
-    return array($latitude, $longitude);
 }
 ?>
