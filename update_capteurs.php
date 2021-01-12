@@ -37,6 +37,20 @@ if (isset($_GET['id_systeme']) AND isset($_GET['type'])) {
 			'id_systeme' => (int)$result['id'],
 			'type' => (string)$_GET['type']
 			));
+	} elseif (isset($_GET['couleur_home'])) {
+		$req = $bdd->prepare('UPDATE capteurs SET couleur_home = :couleur_home WHERE id_systeme = :id_systeme AND type = :type');
+		$req->execute(array(
+			'couleur_home' => '#' . (string)$_GET['couleur_home'],
+			'id_systeme' => (int)$result['id'],
+			'type' => (string)$_GET['type']
+			));
+	} elseif (isset($_GET['couleur_synoptique'])) {
+		$req = $bdd->prepare('UPDATE capteurs SET couleur_synoptique = :couleur_synoptique WHERE id_systeme = :id_systeme AND type = :type');
+		$req->execute(array(
+			'couleur_synoptique' => '#' . (string)$_GET['couleur_synoptique'],
+			'id_systeme' => (int)$result['id'],
+			'type' => (string)$_GET['type']
+			));
 	}
 }
 ?>

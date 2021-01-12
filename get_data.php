@@ -273,20 +273,37 @@ if (isset($_GET['id_systeme'])) {
 					'alarme_seuil_haut' => (int)$donnees['alarme_seuil_haut']
 				);
 			} else {
-				$data_chauffage = array(
-					'installe' => (int)$donnees['installe'],
-					'etat' => (int)$donnees['etat'],
-					'date_consommation' => (string)$donnees['date_consommation'],
-					'consommation_hp' => (float)$donnees['consommation_hp'],
-					'consommation_hc' => (float)$donnees['consommation_hc'],
-					'gestion_temperature' => (int)$donnees['gestion_temperature'],
-					'temperature_arret' => (int)$donnees['temperature_arret'],
-					'temperature_encl' => (int)$donnees['temperature_encl'],
-					'temperature_consigne' => (int)$donnees['temperature_consigne'],
-					'type_chauffage' => (int)$donnees['type_chauffage'],
-					'alarme_seuil_bas' => (int)$donnees['alarme_seuil_bas'],
-					'alarme_seuil_haut' => (int)$donnees['alarme_seuil_haut']
-				);
+				if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '1')) {
+					$data_chauffage = array(
+						'installe' => (int)$donnees['installe'],
+						'etat' => (int)$donnees['etat'],
+						'date_consommation' => (string)$donnees['date_consommation'],
+						'consommation_hp' => (float)$donnees['consommation_hp'],
+						'consommation_hc' => (float)$donnees['consommation_hc'],
+						'gestion_temperature' => (int)$donnees['gestion_temperature'],
+						'temperature_consigne' => (int)$donnees['temperature_consigne'],
+						'gestion_reversible' => (int)$donnees['gestion_reversible'],
+						'temperature_reversible' => (int)$donnees['temperature_reversible'],
+						'type_chauffage' => (int)$donnees['type_chauffage'],
+						'alarme_seuil_bas' => (int)$donnees['alarme_seuil_bas'],
+						'alarme_seuil_haut' => (int)$donnees['alarme_seuil_haut']
+					);
+				} else {
+					$data_chauffage = array(
+						'installe' => (int)$donnees['installe'],
+						'etat' => (int)$donnees['etat'],
+						'date_consommation' => (string)$donnees['date_consommation'],
+						'consommation_hp' => (float)$donnees['consommation_hp'],
+						'consommation_hc' => (float)$donnees['consommation_hc'],
+						'gestion_temperature' => (int)$donnees['gestion_temperature'],
+						'temperature_arret' => (int)$donnees['temperature_arret'],
+						'temperature_encl' => (int)$donnees['temperature_encl'],
+						'temperature_consigne' => (int)$donnees['temperature_consigne'],
+						'type_chauffage' => (int)$donnees['type_chauffage'],
+						'alarme_seuil_bas' => (int)$donnees['alarme_seuil_bas'],
+						'alarme_seuil_haut' => (int)$donnees['alarme_seuil_haut']
+					);
+				}
 			}
 
 			$req->closeCursor();
@@ -810,11 +827,11 @@ if (isset($_GET['id_systeme'])) {
 			echo ';';
 			echo (int)$donnees['gestion_temperature'];
 			echo ';';
-			echo (int)$donnees['temperature_arret'];
-			echo ';';
-			echo (int)$donnees['temperature_encl'];
-			echo ';';
 			echo (int)$donnees['temperature_consigne'];
+			echo ';';
+			echo (int)$donnees['gestion_reversible'];
+			echo ';';
+			echo (int)$donnees['temperature_reversible'];
 			echo ';';
 			echo (int)$donnees['type_chauffage'];
 			echo ';';
