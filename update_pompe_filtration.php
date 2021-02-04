@@ -87,6 +87,12 @@ if (isset($_GET['id_systeme'])) {
 			'frequence_hors_gel' => (int)$_GET['frequence_hors_gel'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['etat_bypass'])) {
+		$req = $bdd->prepare('UPDATE pompe_filtration SET etat_bypass = :etat_bypass WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'etat_bypass' => (int)$_GET['etat_bypass'],
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>

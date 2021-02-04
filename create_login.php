@@ -142,6 +142,12 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 			'id_systeme' => (int)$result['id']
 		));
 
+		// Création de la fontaine
+		$req = $bdd->prepare('INSERT INTO fontaine(id_systeme) VALUES(:id_systeme)');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+		));
+
 		// Création de l'horlogerie
 		$req = $bdd->prepare('INSERT INTO horlogerie(id_systeme) VALUES(:id_systeme)');
 		$req->execute(array(
@@ -229,11 +235,19 @@ if (isset($_GET['id_systeme']) AND isset($_GET['password']) AND isset($_GET['ali
 			'installe' => 0
 		));
 
-		//		Ampéro
+		//		Ampéro (DPD1)
 		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id'],
 			'type' => "Ampéro",
+			'installe' => 0
+		));
+
+		//		Ampéro (DPD4)
+		$req = $bdd->prepare('INSERT INTO capteurs(id_systeme, type, installe) VALUES(:id_systeme, :type, :installe)');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id'],
+			'type' => "Ampéro DPD4",
 			'installe' => 0
 		));
 

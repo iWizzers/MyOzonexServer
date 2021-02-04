@@ -13,6 +13,12 @@ if (isset($_GET['id_systeme'])) {
 			'volume' => (int)$_GET['volume'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['temporisation_demarrage'])) {
+		$req = $bdd->prepare('UPDATE bassin SET temporisation_demarrage = :temporisation_demarrage WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'temporisation_demarrage' => (int)$_GET['temporisation_demarrage'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['type_refoulement'])) {
 		$req = $bdd->prepare('UPDATE bassin SET type_refoulement = :type_refoulement WHERE id_systeme = :id_systeme');
 		$req->execute(array(

@@ -72,19 +72,36 @@ if (isset($_GET['id_systeme'])) {
 
 			$donnees = $req->fetch();
 
-			$data_automatisation = array(
-				'heures_creuses' => (int)$donnees['heures_creuses'],
-				'donnees_equipement' => (int)$donnees['donnees_equipement'],
-				'modif_plage_auto' => (int)$donnees['modif_plage_auto'],
-				'plages_auto' => (int)$donnees['plages_auto'],
-				'debut_plage_auto' => (string)$donnees['debut_plage_auto'],
-				'temps_filtration_jour' => (string)$donnees['temps_filtration_jour'],
-				'plage_auto' => (string)$donnees['plage_auto'],
-				'asservissement_ph_plus' => (int)$donnees['asservissement_ph_plus'],
-				'asservissement_ph_moins' => (int)$donnees['asservissement_ph_moins'],
-				'asservissement_orp' => (int)$donnees['asservissement_orp'],
-				'consigne_orp_auto' => (int)$donnees['consigne_orp_auto']
-			);
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '1')) {
+				$data_automatisation = array(
+					'heures_creuses' => (int)$donnees['heures_creuses'],
+					'donnees_equipement' => (int)$donnees['donnees_equipement'],
+					'modif_plage_auto' => (int)$donnees['modif_plage_auto'],
+					'plages_auto' => (int)$donnees['plages_auto'],
+					'debut_plage_auto' => (string)$donnees['debut_plage_auto'],
+					'temps_filtration_jour' => (string)$donnees['temps_filtration_jour'],
+					'plage_auto' => (string)$donnees['plage_auto'],
+					'asservissement_ph_plus' => (int)$donnees['asservissement_ph_plus'],
+					'asservissement_ph_moins' => (int)$donnees['asservissement_ph_moins'],
+					'asservissement_orp' => (int)$donnees['asservissement_orp'],
+					'consigne_orp_auto' => (int)$donnees['consigne_orp_auto'],
+					'capteur_niveau_eau' => (int)$donnees['capteur_niveau_eau']
+				);
+			} else {
+				$data_automatisation = array(
+					'heures_creuses' => (int)$donnees['heures_creuses'],
+					'donnees_equipement' => (int)$donnees['donnees_equipement'],
+					'modif_plage_auto' => (int)$donnees['modif_plage_auto'],
+					'plages_auto' => (int)$donnees['plages_auto'],
+					'debut_plage_auto' => (string)$donnees['debut_plage_auto'],
+					'temps_filtration_jour' => (string)$donnees['temps_filtration_jour'],
+					'plage_auto' => (string)$donnees['plage_auto'],
+					'asservissement_ph_plus' => (int)$donnees['asservissement_ph_plus'],
+					'asservissement_ph_moins' => (int)$donnees['asservissement_ph_moins'],
+					'asservissement_orp' => (int)$donnees['asservissement_orp'],
+					'consigne_orp_auto' => (int)$donnees['consigne_orp_auto']
+				);
+			}
 
 			// Horlogerie
 			$req = $bdd->prepare('SELECT * FROM horlogerie WHERE id_systeme = :id_systeme');
@@ -111,16 +128,30 @@ if (isset($_GET['id_systeme'])) {
 
 			$donnees = $req->fetch();
 
-			$data_bassin = array(
-				'volume' => (int)$donnees['volume'],
-				'type_refoulement' => (string)$donnees['type_refoulement'],
-				'type_regulation' => (string)$donnees['type_regulation'],
-				'temps_securite_injection' => (int)$donnees['temps_securite_injection'],
-				'hyst_injection_ph' => (float)$donnees['hyst_injection_ph'],
-				'hyst_injection_orp' => (int)$donnees['hyst_injection_orp'],
-				'hyst_injection_ampero' => (float)$donnees['hyst_injection_ampero'],
-				'etat_regulations' => (int)$donnees['etat_regulations']
-			);
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '1')) {
+				$data_bassin = array(
+					'volume' => (int)$donnees['volume'],
+					'temporisation_demarrage' => (int)$donnees['temporisation_demarrage'],
+					'type_refoulement' => (string)$donnees['type_refoulement'],
+					'type_regulation' => (string)$donnees['type_regulation'],
+					'temps_securite_injection' => (int)$donnees['temps_securite_injection'],
+					'hyst_injection_ph' => (float)$donnees['hyst_injection_ph'],
+					'hyst_injection_orp' => (int)$donnees['hyst_injection_orp'],
+					'hyst_injection_ampero' => (float)$donnees['hyst_injection_ampero'],
+					'etat_regulations' => (int)$donnees['etat_regulations']
+				);
+			} else {
+				$data_bassin = array(
+					'volume' => (int)$donnees['volume'],
+					'type_refoulement' => (string)$donnees['type_refoulement'],
+					'type_regulation' => (string)$donnees['type_regulation'],
+					'temps_securite_injection' => (int)$donnees['temps_securite_injection'],
+					'hyst_injection_ph' => (float)$donnees['hyst_injection_ph'],
+					'hyst_injection_orp' => (int)$donnees['hyst_injection_orp'],
+					'hyst_injection_ampero' => (float)$donnees['hyst_injection_ampero'],
+					'etat_regulations' => (int)$donnees['etat_regulations']
+				);
+			}
 
 			$req->closeCursor();
 
@@ -586,6 +617,28 @@ if (isset($_GET['id_systeme'])) {
 			$req->closeCursor();
 
 
+			// Fontaine
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '2')) {
+				$req = $bdd->prepare('SELECT * FROM fontaine WHERE id_systeme = :id_systeme');
+				$req->execute(array(
+					'id_systeme' => $id
+					));
+
+				$donnees = $req->fetch();
+
+				$data_fontaine = array(
+					'installe' => (int)$donnees['installe'],
+					'etat' => (int)$donnees['etat'],
+					'plage_1' => (string)$donnees['plage_1'],
+					'plage_2' => (string)$donnees['plage_2'],
+					'plage_3' => (string)$donnees['plage_3'],
+					'plage_4' => (string)$donnees['plage_4']
+				);
+
+				$req->closeCursor();
+			}
+
+
 			// Capteurs
 			$req = $bdd->prepare('SELECT * FROM capteurs WHERE id_systeme = :id_systeme');
 			$req->execute(array(
@@ -602,7 +655,8 @@ if (isset($_GET['id_systeme'])) {
 			$data_ph = array();
 			$data_orp = array();
 			$data_pression = array();
-			$data_ampero = array();
+			$data_ampero_DPD1 = array();
+			$data_ampero_DPD4 = array();
 			while ($donnees = $req->fetch())
 			{
 				if (explode(".", $version)[0] == '1') {
@@ -664,49 +718,95 @@ if (isset($_GET['id_systeme'])) {
 				}
 				elseif ((string)$donnees['type'] == 'Ampéro')
 				{
-					$data_ampero = $data;
+					$data_ampero_DPD1 = $data;
+				}
+				elseif ((string)$donnees['type'] == 'Ampéro DPD4')
+				{
+					$data_ampero_DPD4 = $data;
 				}
 			}
 
-			$data_capteurs = array(
-				'Température bassin' => $data_temp_bassin,
-				'Température interne' => $data_temp_interne,
-				'Humidité interne' => $data_humidite_interne,
-				'Pression atmosphérique interne' => $data_pression_atm_interne,
-				'Température externe' => $data_temp_externe,
-				'Humidité externe' => $data_humidite_externe,
-				'Pression atmosphérique externe' => $data_pression_atm_externe,
-				'pH' => $data_ph,
-				'ORP' => $data_orp,
-				'Pression' => $data_pression,
-				'Ampéro' => $data_ampero
-			);
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '1')) {
+				$data_capteurs = array(
+					'Température bassin' => $data_temp_bassin,
+					'Température interne' => $data_temp_interne,
+					'Humidité interne' => $data_humidite_interne,
+					'Pression atmosphérique interne' => $data_pression_atm_interne,
+					'Température externe' => $data_temp_externe,
+					'Humidité externe' => $data_humidite_externe,
+					'Pression atmosphérique externe' => $data_pression_atm_externe,
+					'pH' => $data_ph,
+					'ORP' => $data_orp,
+					'Pression' => $data_pression,
+					'Ampéro' => $data_ampero_DPD1,
+					'Ampéro DPD4' => $data_ampero_DPD4
+				);
+			} else {
+				$data_capteurs = array(
+					'Température bassin' => $data_temp_bassin,
+					'Température interne' => $data_temp_interne,
+					'Humidité interne' => $data_humidite_interne,
+					'Pression atmosphérique interne' => $data_pression_atm_interne,
+					'Température externe' => $data_temp_externe,
+					'Humidité externe' => $data_humidite_externe,
+					'Pression atmosphérique externe' => $data_pression_atm_externe,
+					'pH' => $data_ph,
+					'ORP' => $data_orp,
+					'Pression' => $data_pression,
+					'Ampéro' => $data_ampero_DPD1
+				);
+			}
 
 			$req->closeCursor();
 
 
 			// Format d'envoi
-			$output = array(
-				'Système' => $data_systeme,
-				'Events' => $data_events,
-				'Automatisation' => $data_automatisation,
-				'Horlogerie' => $data_horlogerie,
-				'Bassin' => $data_bassin,
-				'Eclairage' => $data_eclairage,
-				'Pompe filtration' => $data_pompe_filtration,
-				'Filtre' => $data_filtre,
-				'Surpresseur' => $data_surpresseur,
-				'Chauffage' => $data_chauffage,
-				'Lampes UV' => $data_lampes_uv,
-				'Ozonateur' => $data_ozonateur,
-				'Electrolyseur' => $data_electrolyseur,
-				'Régulateur pH' => $data_reg_ph,
-				'Régulateur pH-' => $data_ph_moins,
-				'Régulateur pH+' => $data_ph_plus,
-				'Régulateur ORP' => $data_regulateur_orp,
-				'Algicide' => $data_algicide,
-				'Capteurs' => $data_capteurs
-			);
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '2')) {
+				$output = array(
+					'Système' => $data_systeme,
+					'Events' => $data_events,
+					'Automatisation' => $data_automatisation,
+					'Horlogerie' => $data_horlogerie,
+					'Bassin' => $data_bassin,
+					'Eclairage' => $data_eclairage,
+					'Pompe filtration' => $data_pompe_filtration,
+					'Filtre' => $data_filtre,
+					'Surpresseur' => $data_surpresseur,
+					'Chauffage' => $data_chauffage,
+					'Lampes UV' => $data_lampes_uv,
+					'Ozonateur' => $data_ozonateur,
+					'Electrolyseur' => $data_electrolyseur,
+					'Régulateur pH' => $data_reg_ph,
+					'Régulateur pH-' => $data_ph_moins,
+					'Régulateur pH+' => $data_ph_plus,
+					'Régulateur ORP' => $data_regulateur_orp,
+					'Algicide' => $data_algicide,
+					'Fontaine' => $data_fontaine,
+					'Capteurs' => $data_capteurs
+				);
+			} else {
+				$output = array(
+					'Système' => $data_systeme,
+					'Events' => $data_events,
+					'Automatisation' => $data_automatisation,
+					'Horlogerie' => $data_horlogerie,
+					'Bassin' => $data_bassin,
+					'Eclairage' => $data_eclairage,
+					'Pompe filtration' => $data_pompe_filtration,
+					'Filtre' => $data_filtre,
+					'Surpresseur' => $data_surpresseur,
+					'Chauffage' => $data_chauffage,
+					'Lampes UV' => $data_lampes_uv,
+					'Ozonateur' => $data_ozonateur,
+					'Electrolyseur' => $data_electrolyseur,
+					'Régulateur pH' => $data_reg_ph,
+					'Régulateur pH-' => $data_ph_moins,
+					'Régulateur pH+' => $data_ph_plus,
+					'Régulateur ORP' => $data_regulateur_orp,
+					'Algicide' => $data_algicide,
+					'Capteurs' => $data_capteurs
+				);
+			}
 
 			echo json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 		} else {
@@ -742,6 +842,10 @@ if (isset($_GET['id_systeme'])) {
 			$donnees = $req->fetch();
 			echo (int)$donnees['volume'];
 			echo ';';
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '1')) {
+				echo (int)$donnees['temporisation_demarrage'];
+				echo ';';
+			}
 			echo (string)$donnees['type_refoulement'];
 			echo ';';
 			echo (string)$donnees['type_regulation'];
@@ -841,6 +945,28 @@ if (isset($_GET['id_systeme'])) {
 			echo ';';
 			$req->closeCursor();
 
+
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '1')) {
+				// Eclairage
+				$req = $bdd->prepare('SELECT * FROM eclairage WHERE id_systeme = :id_systeme');
+				$req->execute(array(
+					'id_systeme' => $id
+					));
+				$donnees = $req->fetch();
+				echo (int)$donnees['installe'];
+				echo ';';
+				echo (int)$donnees['etat'];
+				echo ';';
+				echo (string)$donnees['plage_1'];
+				echo ';';
+				echo (string)$donnees['plage_2'];
+				echo ';';
+				echo (string)$donnees['plage_3'];
+				echo ';';
+				echo (string)$donnees['plage_4'];
+				echo ';';
+				$req->closeCursor();
+			}
 
 			// Régulateur pH
 			$req = $bdd->prepare('SELECT * FROM regulateur_ph WHERE id_systeme = :id_systeme');
@@ -1062,6 +1188,10 @@ if (isset($_GET['id_systeme'])) {
 			echo (int)$donnees['asservissement_orp'];
 			echo ';';
 			echo (int)$donnees['consigne_orp_auto'];
+			if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '6') && (explode(".", $version)[2] >= '1')) {
+				echo ';';
+				echo (int)$donnees['capteur_niveau_eau'];
+			}
 			$req->closeCursor();
 
 

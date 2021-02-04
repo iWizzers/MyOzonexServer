@@ -57,12 +57,12 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => (string)$_GET['id_systeme']
 				));
 
-			$req = $bdd->prepare('UPDATE automatisation SET heures_creuses = DEFAULT, donnees_equipement = DEFAULT, modif_plage_auto = DEFAULT, plages_auto = DEFAULT, debut_plage_auto = DEFAULT,  temps_filtration_jour = DEFAULT, plage_auto = DEFAULT, asservissement_ph_plus = DEFAULT, asservissement_ph_moins = DEFAULT, asservissement_orp = DEFAULT, consigne_orp_auto = DEFAULT WHERE id_systeme = :id_systeme');
+			$req = $bdd->prepare('UPDATE automatisation SET heures_creuses = DEFAULT, donnees_equipement = DEFAULT, modif_plage_auto = DEFAULT, plages_auto = DEFAULT, debut_plage_auto = DEFAULT,  temps_filtration_jour = DEFAULT, plage_auto = DEFAULT, asservissement_ph_plus = DEFAULT, asservissement_ph_moins = DEFAULT, asservissement_orp = DEFAULT, consigne_orp_auto = DEFAULT, capteur_niveau_eau = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id']
 				));
 
-			$req = $bdd->prepare('UPDATE pompe_filtration SET etat = DEFAULT, lecture_capteurs = DEFAULT, date_consommation = :date_consommation, consommation_hp = DEFAULT, consommation_hc = DEFAULT, plage_1 = DEFAULT, plage_2 = DEFAULT, plage_3 = DEFAULT, plage_4 = DEFAULT WHERE id_systeme = :id_systeme');
+			$req = $bdd->prepare('UPDATE pompe_filtration SET etat = DEFAULT, lecture_capteurs = DEFAULT, date_consommation = :date_consommation, consommation_hp = DEFAULT, consommation_hc = DEFAULT, plage_1 = DEFAULT, plage_2 = DEFAULT, plage_3 = DEFAULT, plage_4 = DEFAULT, etat_hors_gel = DEFAULT etat_bypass = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
 				'date_consommation' => $date,
 				'id_systeme' => (int)$result['id']
@@ -138,7 +138,12 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => (int)$result['id']
 				));
 
-			$req = $bdd->prepare('UPDATE bassin SET type_refoulement = DEFAULT, type_regulation = DEFAULT, temps_securite_injection = DEFAULT, hyst_injection_ph = DEFAULT, hyst_injection_orp = DEFAULT, hyst_injection_ampero = DEFAULT, etat_regulations = DEFAULT WHERE id_systeme = :id_systeme');
+			$req = $bdd->prepare('UPDATE bassin SET temporisation_demarrage = DEFAULT, type_refoulement = DEFAULT, type_regulation = DEFAULT, temps_securite_injection = DEFAULT, hyst_injection_ph = DEFAULT, hyst_injection_orp = DEFAULT, hyst_injection_ampero = DEFAULT, etat_regulations = DEFAULT WHERE id_systeme = :id_systeme');
+			$req->execute(array(
+				'id_systeme' => (int)$result['id']
+				));
+
+			$req = $bdd->prepare('UPDATE fontaine SET installe = DEFAULT, etat = DEFAULT, plage_1 = DEFAULT, plage_2 = DEFAULT, plage_3 = DEFAULT, plage_4 = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id']
 				));
@@ -212,6 +217,12 @@ if (isset($_GET['id_systeme'])) {
 			$req->execute(array(
 				'id_systeme' => (int)$result['id'],
 				'type' => "Ampéro"
+				));
+
+			$req = $bdd->prepare('UPDATE capteurs SET installe = 0, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
+			$req->execute(array(
+				'id_systeme' => (int)$result['id'],
+				'type' => "Ampéro DPD4"
 				));
 		}
 	} elseif (isset($_GET['block'])) {
@@ -341,6 +352,11 @@ if (isset($_GET['id_systeme'])) {
 			));
 
 		$req = $bdd->prepare('DELETE FROM filtre WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM fontaine WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'id_systeme' => (int)$result['id']
 			));
