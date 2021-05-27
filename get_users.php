@@ -8,15 +8,22 @@ $data_users = array();
 
 $version = isset($_GET['version']) ? $_GET['version'] : '1.0.0';
 
-$req = $bdd->prepare('SELECT * FROM login ORDER BY proprietaire ASC');
-$req->execute();
-$donnees = $req->fetch(); // Saute utilisateur "admin"
+if (isset($_GET['piscinier'])) {
+	$req = $bdd->prepare('SELECT * FROM login WHERE piscinier = :piscinier ORDER BY proprietaire ASC');
+	$req->execute(array(
+		'piscinier' => (string)$_GET['piscinier']
+		));
+} else {
+	$req = $bdd->prepare('SELECT * FROM login ORDER BY proprietaire ASC');
+	$req->execute();
+	$donnees = $req->fetch(); // Saute utilisateur "admin"
+}
 
 while ($donnees = $req->fetch())
 {
 	$data = [ 'id_systeme' => (string)$donnees['id_systeme'], 'proprietaire' => (string)$donnees['proprietaire'], 'coordonnees' => (string)$donnees['coordonnees'], 'ville' => (string)$donnees['ville'], 'type_connexion' => (int)$donnees['type_connexion'], 'alive' => (string)$donnees['alive'], 'version' => (string)$donnees['version'], 'blocage' => (int)$donnees['block'], 'type_appareil' => (int)$donnees['type_appareil'], 'piscinier' => (string)$donnees['piscinier'] ];
 
-	if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '2')) {
+	if ((explode(".", $version)[0] > '2') || ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] > '3')) || ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '2'))) {
 		$data['date_pose'] = (string)$donnees['date_pose'];
 	}
 
@@ -43,7 +50,7 @@ for ($i = 0; $i < $login_count; $i++) {
 	$timezone = (string)$donnees['timezone'];
 	$req->closeCursor();
 
-	if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '3')) {
+	if ((explode(".", $version)[0] > '2') || ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] > '3')) || ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '3'))) {
 		$device_date = DateTime::createFromFormat('d/m/Y-H:i', $data_users['user' . strval($i + 1)]['alive'], new DateTimeZone($timezone)); 
 		$current_date = new DateTime("now", new DateTimeZone($timezone));
 		$date_minus = clone $current_date;
@@ -72,7 +79,7 @@ for ($i = 0; $i < $login_count; $i++) {
 			}
 		}
 		$req->closeCursor();
-	} elseif ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '2')) {
+	} elseif ((explode(".", $version)[0] > '2') || ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] > '3')) || ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '2'))) {
 		$req = $bdd->prepare('SELECT type, installe, etat, valeur FROM capteurs WHERE id_systeme = :id_systeme ORDER BY id ASC');
 		$req->execute(array(
 			'id_systeme' => $id
@@ -84,7 +91,7 @@ for ($i = 0; $i < $login_count; $i++) {
 		$req->closeCursor();
 	}
 
-	if ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '2')) {
+	if ((explode(".", $version)[0] > '2') || ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] > '3')) || ((explode(".", $version)[0] == '2') && (explode(".", $version)[1] >= '3') && (explode(".", $version)[2] >= '2'))) {
 		$req = $bdd->prepare('SELECT couleur, titre, texte, dateheure FROM messages WHERE id_systeme = :id_systeme ORDER BY id ASC');
 		$req->execute(array(
 			'id_systeme' => $id

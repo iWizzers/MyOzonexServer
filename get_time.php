@@ -21,13 +21,13 @@ if (isset($_GET['id_systeme'])) {
         'id_systeme' => (int)$donnees['id']
         ));
 
-    if ((int)$donnees['type_appareil'] == 2) {
+    if ((int)$donnees['type_appareil'] > 1) {
         echo '<';
     }
 
-    echo $date->format(((int)$donnees['type_appareil'] == 2 ? 'N/' : '') . 'd/m/Y H:i:s');
+    echo $date->format(((int)$donnees['type_appareil'] > 1 ? 'N/' : '') . 'd/m/Y H:i:s');
 
-    if ((int)$donnees['type_appareil'] == 2) {
+    if ((int)$donnees['type_appareil'] > 1) {
         echo '>';
     }
 }

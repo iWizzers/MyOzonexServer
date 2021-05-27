@@ -10,7 +10,7 @@ if (isset($_GET['id_systeme'])) {
 	if (isset($_GET['volume'])) {
 		$req = $bdd->prepare('UPDATE bassin SET volume = :volume WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'volume' => (int)$_GET['volume'],
+			'volume' => (float)$_GET['volume'],
 			'id_systeme' => (int)$result['id']
 			));
 	} elseif (isset($_GET['temporisation_demarrage'])) {

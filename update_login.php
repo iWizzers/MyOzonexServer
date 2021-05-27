@@ -268,18 +268,24 @@ if (isset($_GET['id_systeme'])) {
 			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['version'])) {
-		// Appareil de démonstration
-		$req = $bdd->prepare('UPDATE login SET version = :version WHERE id_systeme = :id_systeme');
-		$req->execute(array(
-			'version' => explode(" - ", (string)$_GET['version'])[1],
-			'id_systeme' => 'DEMO-0001'
-			));
-
 		// Appareil en cours
 		$req = $bdd->prepare('UPDATE login SET version = :version WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'version' => (string)$_GET['version'],
 			'id_systeme' => (string)$_GET['id_systeme']
+			));
+
+		// Appareil de démonstration
+		$req = $bdd->prepare('SELECT version FROM login WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => 'BMSO-LYLO'
+		));
+		$donnees = $req->fetch();
+
+		$req = $bdd->prepare('UPDATE login SET version = :version WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'version' => explode(" - ", (string)$donnees['version'])[1],
+			'id_systeme' => 'DEMO-0001'
 			));
 	} elseif (isset($_GET['type_appareil'])) {
 		$req = $bdd->prepare('UPDATE login SET type_appareil = :type_appareil WHERE id_systeme = :id_systeme');

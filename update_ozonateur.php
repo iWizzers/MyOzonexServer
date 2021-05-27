@@ -39,6 +39,60 @@ if (isset($_GET['id_systeme'])) {
 			'consommation_hc' => (float)$_GET['consommation_hc'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['type_ozone'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET type_ozone = :type_ozone WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'type_ozone' => (string)$_GET['type_ozone'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['nombre_ventilateurs'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET nombre_ventilateurs = :nombre_ventilateurs WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'nombre_ventilateurs' => (int)$_GET['nombre_ventilateurs'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['tempo_ozone'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET tempo_ozone = :tempo_ozone WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'tempo_ozone' => (int)$_GET['tempo_ozone'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['erreurs_ozone'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET erreurs_ozone = :erreurs_ozone WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'erreurs_ozone' => (int)$_GET['erreurs_ozone'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['vitesse_fan_1_ozone'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET vitesse_fan_1_ozone = :vitesse_fan_1_ozone WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'vitesse_fan_1_ozone' => (int)$_GET['vitesse_fan_1_ozone'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['vitesse_fan_2_ozone'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET vitesse_fan_2_ozone = :vitesse_fan_2_ozone WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'vitesse_fan_2_ozone' => (int)$_GET['vitesse_fan_2_ozone'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['courant_alim_ozone'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET courant_alim_ozone = :courant_alim_ozone WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'courant_alim_ozone' => (int)$_GET['courant_alim_ozone'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['tension_alim_ozone'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET tension_alim_ozone = :tension_alim_ozone WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'tension_alim_ozone' => (float)$_GET['tension_alim_ozone'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['haute_tension_alim_ozone'])) {
+		$req = $bdd->prepare('UPDATE ozonateur SET haute_tension_alim_ozone = :haute_tension_alim_ozone WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'haute_tension_alim_ozone' => (int)$_GET['haute_tension_alim_ozone'],
+			'id_systeme' => (int)$result['id']
+			));
 	}
 }
 ?>

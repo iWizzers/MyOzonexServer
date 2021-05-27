@@ -7,7 +7,13 @@ if (isset($_GET['id_systeme'])) {
 		'id_systeme' => (string)$_GET['id_systeme']));
 	$result = $req->fetch();
 
-	if (isset($_GET['etat'])) {
+	if (isset($_GET['installe'])) {
+		$req = $bdd->prepare('UPDATE pompe_filtration SET installe = :installe WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'installe' => (int)$_GET['installe'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['etat'])) {
 		$req = $bdd->prepare('UPDATE pompe_filtration SET etat = :etat WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'etat' => (int)$_GET['etat'],

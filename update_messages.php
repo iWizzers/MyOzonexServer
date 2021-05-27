@@ -26,18 +26,27 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => (int)$result['id']
 				));
 		}
-	} elseif (isset($_GET['titre']) AND isset($_GET['dateheure']) AND isset($_GET['suppr'])) {
-		$req = $bdd->prepare('DELETE FROM messages WHERE id_systeme = :id_systeme AND titre = :titre AND dateheure = :dateheure');
-		$req->execute(array(
-			'id_systeme' => (int)$result['id'],
-			'titre' => (string)$_GET['titre'],
-			'dateheure' => (string)$_GET['dateheure']
-			));
 	} elseif (isset($_GET['suppr'])) {
-		$req = $bdd->prepare('DELETE FROM messages WHERE id_systeme = :id_systeme');
-		$req->execute(array(
-			'id_systeme' => (int)$result['id']
-			));
+		if (isset($_GET['titre']) AND isset($_GET['dateheure'])) {
+			$req = $bdd->prepare('DELETE FROM messages WHERE id_systeme = :id_systeme AND titre = :titre AND dateheure = :dateheure');
+			$req->execute(array(
+				'id_systeme' => (int)$result['id'],
+				'titre' => (string)$_GET['titre'],
+				'dateheure' => (string)$_GET['dateheure']
+				));
+		} elseif (isset($_GET['titre']) AND isset($_GET['texte'])) {
+			$req = $bdd->prepare('DELETE FROM messages WHERE id_systeme = :id_systeme AND titre = :titre AND texte = :texte');
+			$req->execute(array(
+				'id_systeme' => (int)$result['id'],
+				'titre' => (string)$_GET['titre'],
+				'texte' => (string)$_GET['texte']
+				));
+		} else {
+			$req = $bdd->prepare('DELETE FROM messages WHERE id_systeme = :id_systeme');
+			$req->execute(array(
+				'id_systeme' => (int)$result['id']
+				));
+		}
 	}
 }
 ?>

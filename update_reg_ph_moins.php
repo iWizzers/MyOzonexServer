@@ -13,6 +13,12 @@ if (isset($_GET['id_systeme'])) {
 			'installe' => (int)$_GET['installe'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['debit'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph_moins SET debit = :debit WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'debit' => (float)$_GET['debit'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['etat'])) {
 		$req = $bdd->prepare('UPDATE regulateur_ph_moins SET etat = :etat WHERE id_systeme = :id_systeme');
 		$req->execute(array(

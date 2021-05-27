@@ -7,7 +7,13 @@ if (isset($_GET['id_systeme'])) {
 		'id_systeme' => (string)$_GET['id_systeme']));
 	$result = $req->fetch();
 
-	if (isset($_GET['date_dernier_lavage'])) {
+	if (isset($_GET['installe'])) {
+		$req = $bdd->prepare('UPDATE filtre SET installe = :installe WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'installe' => (int)$_GET['installe'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['date_dernier_lavage'])) {
 		$req = $bdd->prepare('UPDATE filtre SET date_dernier_lavage = :date_dernier_lavage, pression_apres_lavage = :pression_apres_lavage, pression_prochain_lavage = :pression_prochain_lavage WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'date_dernier_lavage' => (string)$_GET['date_dernier_lavage'],

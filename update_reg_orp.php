@@ -13,6 +13,12 @@ if (isset($_GET['id_systeme'])) {
 			'installe' => (int)$_GET['installe'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['debit'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET debit = :debit WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'debit' => (float)$_GET['debit'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['point_consigne_orp'])) {
 		$req = $bdd->prepare('UPDATE regulateur_orp SET point_consigne_orp = :point_consigne_orp WHERE id_systeme = :id_systeme');
 		$req->execute(array(
@@ -133,6 +139,12 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('UPDATE regulateur_orp SET surchloration = :surchloration WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'surchloration' => (int)$_GET['surchloration'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['jour'])) {
+		$req = $bdd->prepare('UPDATE regulateur_orp SET jour = :jour WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'jour' => (int)$_GET['jour'],
 			'id_systeme' => (int)$result['id']
 			));
 	} elseif (isset($_GET['frequence'])) {
