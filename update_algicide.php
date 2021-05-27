@@ -13,6 +13,12 @@ if (isset($_GET['id_systeme'])) {
 			'installe' => (int)$_GET['installe'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['debit'])) {
+		$req = $bdd->prepare('UPDATE algicide SET debit = :debit WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'debit' => (float)$_GET['debit'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['etat'])) {
 		$req = $bdd->prepare('UPDATE algicide SET etat = :etat WHERE id_systeme = :id_systeme');
 		$req->execute(array(
@@ -43,6 +49,12 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('UPDATE algicide SET active = :active WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'active' => (int)$_GET['active'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['jour'])) {
+		$req = $bdd->prepare('UPDATE algicide SET jour = :jour WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'jour' => (int)$_GET['jour'],
 			'id_systeme' => (int)$result['id']
 			));
 	} elseif (isset($_GET['frequence'])) {

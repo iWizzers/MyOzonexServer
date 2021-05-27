@@ -3,38 +3,29 @@ include("bdd_connect.php");
 
 header('Content-Type: application/json');
 
+$data = array();
 $i = 0;
-$data_problems = array();
 
 if (isset($_GET['id_systeme'])) {
-	$req = $bdd->prepare('SELECT * FROM login WHERE id_systeme = :id_systeme');
+	$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
 	$req->execute(array(
-		'id_systeme' => (string)$_GET['id_systeme']
-		));
+		'id_systeme' => (string)$_GET['id_systeme']));
 	$donnees = $req->fetch();
-	$id = (int)$donnees['id'];
 	$req->closeCursor();
 
-	if ($id != null) {
-		$req = $bdd->prepare('SELECT couleur, titre, texte, dateheure FROM messages WHERE id_systeme = :id_systeme ORDER BY id ASC');
-		$req->execute(array(
-			'id_systeme' => $id
-			));
-
-		while ($donnees = $req->fetch())
-		{
-			$data = [ 'couleur' => (string)$donnees['couleur'], 'titre' => (string)$donnees['titre'], 'texte' => (string)$donnees['texte'], 'dateheure' => (string)$donnees['dateheure'] ];
-			$data_problems += [ "probleme" . strval(++$i) => $data ];
-		}
-
-		$req->closeCursor();
-
-
-		$output = array(
-			'Problemes' => $data_problems
-		);
-
-		echo json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+	$req = $bdd->prepare('SELECT couleur, titre, texte, dateheure FROM messages WHERE id_systeme = :id_systeme ORDER BY id ASC');
+	$req->execute(array(
+		'id_systeme' => (int)$donnees['id']));
+	while ($donnees = $req->fetch()) {
+		$data['msg' . strval(++$i)][(string)$donnees['couleur'] . ';' . (string)$donnees['titre']] = (string)$donnees['texte'] . ';' . (string)$donnees['dateheure'];
 	}
+	$req->closeCursor();
 }
+
+// Format d'envoi
+$output = array(
+	'Data' => $data
+);
+
+echo json_encode($output, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 ?>

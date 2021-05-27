@@ -1,60 +1,46 @@
 <?php
 include("bdd_connect.php");
-
-
-function get_coordinates($address) {
-	$prepAddr = str_replace(' ','+',$address);
-	$geocode=file_get_contents('https://maps.google.com/maps/api/geocode/json?address='.$prepAddr.'&sensor=false&key=AIzaSyCxVtrpaAk7ZQljPxI_tGHuSeOPcQNlzb8');
-	$output= json_decode($geocode);
-	$latitude = $output->results[0]->geometry->location->lat;
-	$longitude = $output->results[0]->geometry->location->lng;
-	return array($latitude, $longitude);
-}
-
-
-function get_datetime_from_nearest_timezone($coordinates) {
-    $timezone_ids = DateTimeZone::listIdentifiers();
-    $time_zone = '';
-
-    if($timezone_ids && is_array($timezone_ids) && isset($timezone_ids[0])) {
-        $tz_distance = 0;
-
-        //only one identifier?
-        if (count($timezone_ids) == 1) {
-            $time_zone = $timezone_ids[0];
-        } else {
-            foreach($timezone_ids as $timezone_id) {
-                $timezone = new DateTimeZone($timezone_id);
-                $location = $timezone->getLocation();
-                $tz_lat   = $location['latitude'];
-                $tz_long  = $location['longitude'];
-
-                $theta    = $coordinates[1] - $tz_long;
-                $distance = (sin(deg2rad($coordinates[0])) * sin(deg2rad($tz_lat))) 
-                + (cos(deg2rad($coordinates[0])) * cos(deg2rad($tz_lat)) * cos(deg2rad($theta)));
-                $distance = acos($distance);
-                $distance = abs(rad2deg($distance));
-                // echo '<br />'.$timezone_id.' '.$distance; 
-
-                if (!$time_zone || $tz_distance > $distance) {
-                    $time_zone   = $timezone_id;
-                    $tz_distance = $distance;
-                } 
-            }
-        }
-    }
-
-    $date = new DateTime("now", new DateTimeZone($time_zone));
-    return  'GMT' . $date->format('P');
-}
+include("api.php");
 
 
 if (isset($_GET['id_systeme'])) {
-	if (isset($_GET['alive'])) {
+	if (isset($_GET['password'])) {
+		$pass_hache = password_hash($_GET['password'], PASSWORD_DEFAULT);
+
+		if (isset($_GET['piscinier'])) {
+			$req = $bdd->prepare('SELECT id FROM pisciniers WHERE nom = :nom');
+			$req->execute(array(
+				'nom' => (string)$_GET['piscinier']
+				));
+			$donnees = $req->fetch();
+			$req->closeCursor();
+
+			$req = $bdd->prepare('UPDATE pisciniers SET password = :password WHERE id = :id');
+			$req->execute(array(
+				'password' => $pass_hache,
+				'id' => (int)$donnees['id']
+				));
+		} else {
+			$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
+			$req->execute(array(
+				'id_systeme' => (string)$_GET['id_systeme']
+				));
+			$donnees = $req->fetch();
+			$req->closeCursor();
+
+			$req = $bdd->prepare('UPDATE login SET password = :password WHERE id = :id');
+			$req->execute(array(
+				'password' => $pass_hache,
+				'id' => (int)$donnees['id']
+				));
+		}
+	} elseif (isset($_GET['alive'])) {
+		include 'create_save.php';
+
 		$req = $bdd->prepare('UPDATE login SET alive = :alive WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'alive' => (string)$_GET['alive'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 		
 		if (isset($_GET['raz'])) {
@@ -68,15 +54,15 @@ if (isset($_GET['id_systeme'])) {
 
 			$req = $bdd->prepare('UPDATE login SET background = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
-				'id_systeme' => $_GET['id_systeme']
+				'id_systeme' => (string)$_GET['id_systeme']
 				));
 
-			$req = $bdd->prepare('UPDATE automatisation SET heures_creuses = DEFAULT, donnees_equipement = DEFAULT, modif_plage_auto = DEFAULT, plages_auto = DEFAULT, debut_plage_auto = DEFAULT,  temps_filtration_jour = DEFAULT, plage_auto = DEFAULT, asservissement_ph_plus = DEFAULT, asservissement_ph_moins = DEFAULT, asservissement_orp = DEFAULT, consigne_orp_auto = DEFAULT WHERE id_systeme = :id_systeme');
+			$req = $bdd->prepare('UPDATE automatisation SET heures_creuses = DEFAULT, donnees_equipement = DEFAULT, modif_plage_auto = DEFAULT, plages_auto = DEFAULT, debut_plage_auto = DEFAULT,  temps_filtration_jour = DEFAULT, plage_auto = DEFAULT, asservissement_ph_plus = DEFAULT, asservissement_ph_moins = DEFAULT, asservissement_orp = DEFAULT, consigne_orp_auto = DEFAULT, capteur_niveau_eau = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id']
 				));
 
-			$req = $bdd->prepare('UPDATE pompe_filtration SET etat = DEFAULT, lecture_capteurs = DEFAULT, date_consommation = :date_consommation, consommation_hp = DEFAULT, consommation_hc = DEFAULT, plage_1 = DEFAULT, plage_2 = DEFAULT, plage_3 = DEFAULT, plage_4 = DEFAULT WHERE id_systeme = :id_systeme');
+			$req = $bdd->prepare('UPDATE pompe_filtration SET etat = DEFAULT, lecture_capteurs = DEFAULT, date_consommation = :date_consommation, consommation_hp = DEFAULT, consommation_hc = DEFAULT, plage_1 = DEFAULT, plage_2 = DEFAULT, plage_3 = DEFAULT, plage_4 = DEFAULT, etat_hors_gel = DEFAULT etat_bypass = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
 				'date_consommation' => $date,
 				'id_systeme' => (int)$result['id']
@@ -152,7 +138,12 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => (int)$result['id']
 				));
 
-			$req = $bdd->prepare('UPDATE bassin SET type_refoulement = DEFAULT, type_regulation = DEFAULT, temps_securite_injection = DEFAULT, hyst_injection_ph = DEFAULT, hyst_injection_orp = DEFAULT, hyst_injection_ampero = DEFAULT, etat_regulations = DEFAULT WHERE id_systeme = :id_systeme');
+			$req = $bdd->prepare('UPDATE bassin SET temporisation_demarrage = DEFAULT, type_refoulement = DEFAULT, type_regulation = DEFAULT, temps_securite_injection = DEFAULT, hyst_injection_ph = DEFAULT, hyst_injection_orp = DEFAULT, hyst_injection_ampero = DEFAULT, etat_regulations = DEFAULT WHERE id_systeme = :id_systeme');
+			$req->execute(array(
+				'id_systeme' => (int)$result['id']
+				));
+
+			$req = $bdd->prepare('UPDATE fontaine SET installe = DEFAULT, etat = DEFAULT, plage_1 = DEFAULT, plage_2 = DEFAULT, plage_3 = DEFAULT, plage_4 = DEFAULT WHERE id_systeme = :id_systeme');
 			$req->execute(array(
 				'id_systeme' => (int)$result['id']
 				));
@@ -227,65 +218,214 @@ if (isset($_GET['id_systeme'])) {
 				'id_systeme' => (int)$result['id'],
 				'type' => "Ampéro"
 				));
+
+			$req = $bdd->prepare('UPDATE capteurs SET installe = 0, etat = DEFAULT, valeur = DEFAULT WHERE id_systeme = :id_systeme AND type = :type');
+			$req->execute(array(
+				'id_systeme' => (int)$result['id'],
+				'type' => "Ampéro DPD4"
+				));
 		}
 	} elseif (isset($_GET['block'])) {
 		$req = $bdd->prepare('UPDATE login SET block = :block WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'block' => (int)$_GET['block'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['background'])) {
 		$req = $bdd->prepare('UPDATE login SET background = :background WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'background' => (int)$_GET['background'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['proprietaire'])) {
 		$req = $bdd->prepare('UPDATE login SET proprietaire = :proprietaire WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'proprietaire' => (string)$_GET['proprietaire'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['coordonnees'])) {
 		$req = $bdd->prepare('UPDATE login SET coordonnees = :coordonnees WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'coordonnees' => (string)$_GET['coordonnees'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['ville'])) {
 		$req = $bdd->prepare('UPDATE login SET ville = :ville WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'ville' => (string)$_GET['ville'],
-			'id_systeme' => $_GET['id_systeme']
-			));
-
-		$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
-		$req->execute(array(
-			'id_systeme' => (string)$_GET['id_systeme']));
-		$result = $req->fetch();
-
-		$req = $bdd->prepare('UPDATE horlogerie SET index_gmt = :index_gmt WHERE id_systeme = :id_systeme');
-		$req->execute(array(
-			'index_gmt' => (string)get_datetime_from_nearest_timezone(get_coordinates((string)$_GET['ville'])),
-			'id_systeme' => (int)$result['id']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['type_connexion'])) {
 		$req = $bdd->prepare('UPDATE login SET type_connexion = :type_connexion WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'type_connexion' => (int)$_GET['type_connexion'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['version_qseven'])) {
 		$req = $bdd->prepare('UPDATE login SET version_qseven = :version_qseven WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'version_qseven' => (int)$_GET['version_qseven'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	} elseif (isset($_GET['version'])) {
+		// Appareil en cours
 		$req = $bdd->prepare('UPDATE login SET version = :version WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'version' => (string)$_GET['version'],
-			'id_systeme' => $_GET['id_systeme']
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+
+		// Appareil de démonstration
+		$req = $bdd->prepare('SELECT version FROM login WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => 'BMSO-LYLO'
+		));
+		$donnees = $req->fetch();
+
+		$req = $bdd->prepare('UPDATE login SET version = :version WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'version' => explode(" - ", (string)$donnees['version'])[1],
+			'id_systeme' => 'DEMO-0001'
+			));
+	} elseif (isset($_GET['type_appareil'])) {
+		$req = $bdd->prepare('UPDATE login SET type_appareil = :type_appareil WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'type_appareil' => (int)$_GET['type_appareil'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+	} elseif (isset($_GET['piscinier'])) {
+		$req = $bdd->prepare('UPDATE login SET piscinier = :piscinier WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'piscinier' => (string)$_GET['piscinier'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+	} elseif (isset($_GET['date_pose'])) {
+		$req = $bdd->prepare('UPDATE login SET date_pose = :date_pose WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'date_pose' => (string)$_GET['date_pose'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+	} elseif (isset($_GET['manipulation_client'])) {
+		$req = $bdd->prepare('UPDATE login SET manipulation_client = :manipulation_client WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'manipulation_client' => (int)$_GET['manipulation_client'],
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+	} elseif (isset($_GET['delete'])) {
+		$req = $bdd->prepare('SELECT id FROM login WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (string)$_GET['id_systeme']));
+		$result = $req->fetch();
+
+		$req = $bdd->prepare('DELETE FROM algicide WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM automatisation WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM bassin WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM capteurs WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM chauffage WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM eclairage WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM electrolyseur WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM events WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM filtre WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM fontaine WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM horlogerie WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM lampes_uv WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM login WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (string)$_GET['id_systeme']
+			));
+
+		$req = $bdd->prepare('DELETE FROM messages WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM ozonateur WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM pompe_filtration WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM regulateur_orp WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM regulateur_ph WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM regulateur_ph_moins WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM regulateur_ph_plus WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+
+		$req = $bdd->prepare('DELETE FROM surpresseur WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['restart'])) {
+		$req = $bdd->prepare('UPDATE login SET restart = :restart WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'restart' => (int)$_GET['restart'],
+			'id_systeme' => (string)$_GET['id_systeme']
 			));
 	}
 }

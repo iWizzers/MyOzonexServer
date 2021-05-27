@@ -13,6 +13,12 @@ if (isset($_GET['id_systeme'])) {
 			'installe' => (int)$_GET['installe'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['debit'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph_plus SET debit = :debit WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'debit' => (float)$_GET['debit'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['etat'])) {
 		$req = $bdd->prepare('UPDATE regulateur_ph_plus SET etat = :etat WHERE id_systeme = :id_systeme');
 		$req->execute(array(
@@ -67,6 +73,12 @@ if (isset($_GET['id_systeme'])) {
 		$req = $bdd->prepare('UPDATE regulateur_ph_plus SET multiplicateur_diff = :multiplicateur_diff WHERE id_systeme = :id_systeme');
 		$req->execute(array(
 			'multiplicateur_diff' => (int)$_GET['multiplicateur_diff'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['duree_injection_minimum'])) {
+		$req = $bdd->prepare('UPDATE regulateur_ph_plus SET duree_injection_minimum = :duree_injection_minimum WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'duree_injection_minimum' => (string)$_GET['duree_injection_minimum'],
 			'id_systeme' => (int)$result['id']
 			));
 	} elseif (isset($_GET['duree_injection'])) {

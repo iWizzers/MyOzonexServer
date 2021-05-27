@@ -65,7 +65,13 @@ if (isset($_GET['id_systeme'])) {
 	} elseif (isset($_GET['consigne_orp_auto'])) {
 		$req = $bdd->prepare('UPDATE automatisation SET consigne_orp_auto = :consigne_orp_auto WHERE id_systeme = :id_systeme');
 		$req->execute(array(
-			'consigne_orp_auto' => (float)$_GET['consigne_orp_auto'],
+			'consigne_orp_auto' => (int)$_GET['consigne_orp_auto'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['capteur_niveau_eau'])) {
+		$req = $bdd->prepare('UPDATE automatisation SET capteur_niveau_eau = :capteur_niveau_eau WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'capteur_niveau_eau' => (int)$_GET['capteur_niveau_eau'],
 			'id_systeme' => (int)$result['id']
 			));
 	}

@@ -63,6 +63,18 @@ if (isset($_GET['id_systeme'])) {
 			'temperature_consigne' => (int)$_GET['temperature_consigne'],
 			'id_systeme' => (int)$result['id']
 			));
+	} elseif (isset($_GET['gestion_reversible'])) {
+		$req = $bdd->prepare('UPDATE chauffage SET gestion_reversible = :gestion_reversible WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'gestion_reversible' => (int)$_GET['gestion_reversible'],
+			'id_systeme' => (int)$result['id']
+			));
+	} elseif (isset($_GET['temperature_reversible'])) {
+		$req = $bdd->prepare('UPDATE chauffage SET temperature_reversible = :temperature_reversible WHERE id_systeme = :id_systeme');
+		$req->execute(array(
+			'temperature_reversible' => (int)$_GET['temperature_reversible'],
+			'id_systeme' => (int)$result['id']
+			));
 	} elseif (isset($_GET['plage_1'])) {
 		$req = $bdd->prepare('UPDATE chauffage SET plage_1 = :plage_1 WHERE id_systeme = :id_systeme');
 		$req->execute(array(
